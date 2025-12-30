@@ -66,5 +66,10 @@ public class User {
     public void setLastSync(Instant lastSync) {
         this.lastSync = lastSync;
     }
+
+    @Override
+    public String toString() {
+        return "User: " + this.lastfmUsername;
+    }
 }
 

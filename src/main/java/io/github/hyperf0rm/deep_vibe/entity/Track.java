@@ -12,7 +12,7 @@ public class Track {
     private String name;
     private String artistName;
     private String preview_url;
-    private boolean isAnalyzed;
+    private boolean isAnalyzed = false;
     private short bpm;
     private float rms;
     // private String key;
@@ -73,5 +73,10 @@ public class Track {
 
     public void setRms(float rms) {
         this.rms = rms;
+    }
+
+    @Override
+    public String toString() {
+        return this.artistName + " - " + this.name;
     }
 }

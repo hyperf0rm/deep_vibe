@@ -9,6 +9,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "scrobbles",
+       uniqueConstraints = { @UniqueConstraint(columnNames = {"user", "track_id", "played_at"}) },
        indexes = { @Index(name = "idx_played_at", columnList = "played_at") })
 public class Scrobble {
     @Id
@@ -55,5 +56,13 @@ public class Scrobble {
 
     public void setPlayedAt(Instant playedAt) {
         this.playedAt = playedAt;
+    }
+
+    @Override
+    public String toString() {
+        return ("Scrobble for user " + this.user.getLastfmUsername() +
+                ": " + this.track.getArtistName() +
+                " - " + this.track.getName() +
+                ", played at: " + this.playedAt);
     }
 }
