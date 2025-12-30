@@ -1,6 +1,6 @@
 package io.github.hyperf0rm.deep_vibe.controller;
 
-import io.github.hyperf0rm.deep_vibe.dto.LastFmUser;
+import io.github.hyperf0rm.deep_vibe.dto.LastFmResponse;
 import io.github.hyperf0rm.deep_vibe.dto.UserCreateRequest;
 import io.github.hyperf0rm.deep_vibe.dto.UserResponse;
 import io.github.hyperf0rm.deep_vibe.entity.User;
@@ -9,6 +9,8 @@ import io.github.hyperf0rm.deep_vibe.service.LastFmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -40,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/sync/{username}")
-    public LastFmUser doSync(@PathVariable String username) {
-        return lastFmService.getUserInfo(username);
+    public List<LastFmResponse.Track> doSync(@PathVariable String username) {
+        return lastFmService.getRecentTracks(username);
     }
 }
