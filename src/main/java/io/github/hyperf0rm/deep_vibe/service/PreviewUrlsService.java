@@ -30,7 +30,7 @@ public class PreviewUrlsService {
         this.trackRepository = trackRepository;
     }
 
-    @Scheduled(fixedDelay = 10000)
+    //@Scheduled(fixedDelay = 10000)
     public void findPreviewUrls() {
         List<Track> tracks = trackRepository.findByPreviewUrlIsNull();
 
