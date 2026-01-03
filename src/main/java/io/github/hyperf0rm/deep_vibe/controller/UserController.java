@@ -1,5 +1,6 @@
 package io.github.hyperf0rm.deep_vibe.controller;
 
+import io.github.hyperf0rm.deep_vibe.dto.PreviewUrlsResponse;
 import io.github.hyperf0rm.deep_vibe.dto.LastFmResponse;
 import io.github.hyperf0rm.deep_vibe.dto.UserCreateRequest;
 import io.github.hyperf0rm.deep_vibe.dto.UserResponse;
@@ -10,6 +11,7 @@ import io.github.hyperf0rm.deep_vibe.repository.ScrobbleRepository;
 import io.github.hyperf0rm.deep_vibe.repository.TrackRepository;
 import io.github.hyperf0rm.deep_vibe.repository.UserRepository;
 import io.github.hyperf0rm.deep_vibe.service.LastFmService;
+import io.github.hyperf0rm.deep_vibe.service.PreviewUrlsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -27,16 +29,19 @@ public class UserController {
     private final LastFmService lastFmService;
     private final TrackRepository trackRepository;
     private final ScrobbleRepository scrobbleRepository;
+    private final PreviewUrlsService previewUrlsService;
 
     public UserController(
             UserRepository userRepository,
             LastFmService service,
             TrackRepository trackRepository,
-            ScrobbleRepository scrobbleRepository) {
+            ScrobbleRepository scrobbleRepository,
+            PreviewUrlsService previewUrlsService) {
         this.userRepository = userRepository;
         this.lastFmService = service;
         this.trackRepository = trackRepository;
         this.scrobbleRepository = scrobbleRepository;
+        this.previewUrlsService = previewUrlsService;
     }
 
     @PostMapping(path = "/add")
@@ -102,5 +107,10 @@ public class UserController {
     public Iterable<Scrobble> getScrobbles(@PathVariable String username) {
         User user = userRepository.findByLastfmUsername(username);
         return scrobbleRepository.findScrobblesByUser(user);
+    }
+
+    @GetMapping(path = "/tracks/geturl")
+    public void getUrls() {
+        previewUrlsService.findPreviewUrls();
     }
 }

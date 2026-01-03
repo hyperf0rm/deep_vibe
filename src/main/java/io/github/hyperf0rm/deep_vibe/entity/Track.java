@@ -11,7 +11,7 @@ public class Track {
     private Long id;
     private String name;
     private String artistName;
-    private String preview_url;
+    private String previewUrl;
     private boolean isAnalyzed = false;
     private short bpm;
     private float rms;
@@ -43,20 +43,20 @@ public class Track {
         this.artistName = artistName;
     }
 
-    public String getPreview_url() {
-        return preview_url;
+    public String getPreviewUrl() {
+        return previewUrl;
     }
 
-    public void setPreview_url(String preview_url) {
-        this.preview_url = preview_url;
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
     }
 
     public boolean isAnalyzed() {
         return isAnalyzed;
     }
 
-    public void setAnalyzed(boolean analyzed) {
-        isAnalyzed = analyzed;
+    public void setAnalyzed(boolean isAnalyzed) {
+        this.isAnalyzed = isAnalyzed;
     }
 
     public short getBpm() {
