@@ -1,5 +1,6 @@
 package io.github.hyperf0rm.deep_vibe.entity;
 
+import io.github.hyperf0rm.deep_vibe.enums.TrackQueueStatus;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,7 +13,12 @@ public class Track {
     private String name;
     private String artistName;
     private String previewUrl;
-    private boolean isAnalyzed = false;
+    //private boolean isAnalyzed = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TrackQueueStatus status = TrackQueueStatus.NEW;
+
     private short bpm;
     private float rms;
     // private String key;
