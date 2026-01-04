@@ -19,6 +19,15 @@ services:
     restart: always
     volumes:
       - redis_data:/data
+  worker:
+    build: ./python_worker
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    env_file:
+      - .env
 
 volumes:
     pg_data:

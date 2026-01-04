@@ -13,7 +13,7 @@ public class Track {
     private String name;
     private String artistName;
     private String previewUrl;
-    //private boolean isAnalyzed = false;
+    private boolean isAnalyzed = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -25,11 +25,11 @@ public class Track {
     // private ... spectralCentroid;
 
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,8 +61,16 @@ public class Track {
         return isAnalyzed;
     }
 
-    public void setAnalyzed(boolean isAnalyzed) {
-        this.isAnalyzed = isAnalyzed;
+    public void setAnalyzed(boolean analyzed) {
+        isAnalyzed = analyzed;
+    }
+
+    public TrackQueueStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TrackQueueStatus status) {
+        this.status = status;
     }
 
     public short getBpm() {

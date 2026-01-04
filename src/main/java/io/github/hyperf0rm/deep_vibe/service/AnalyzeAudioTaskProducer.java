@@ -25,7 +25,7 @@ public class AnalyzeAudioTaskProducer {
         this.trackRepository = trackRepository;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 5000)
     public void sendTaskToQueue() {
 
         List<Track> tracks = trackRepository.findByPreviewUrlIsNotNullAndStatus(TrackQueueStatus.NEW);
@@ -37,7 +37,10 @@ public class AnalyzeAudioTaskProducer {
         for (Track track : tracks) {
             AnalyzeAudioTask task = new AnalyzeAudioTask(track.getId(), track.getPreviewUrl());
             redisTemplate.opsForList().leftPush(QUEUE_NAME, task);
-            log.info("Send task to queue: {}", task);
+            log.info("Sent task to queue: {}", task);
+            track.setStatus(TrackQueueStatus.QUEUED);
         }
+
+        trackRepository.saveAll(tracks);
     }
 }
