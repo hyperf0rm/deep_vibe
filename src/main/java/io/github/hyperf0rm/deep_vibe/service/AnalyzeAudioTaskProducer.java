@@ -20,7 +20,10 @@ public class AnalyzeAudioTaskProducer {
     private final TrackRepository trackRepository;
     private static final String QUEUE_NAME = "analyze_audio_task_queue";
 
-    public AnalyzeAudioTaskProducer(RedisTemplate<String, Object> redisTemplate, TrackRepository trackRepository) {
+    public AnalyzeAudioTaskProducer(
+            RedisTemplate<String, Object> redisTemplate,
+            TrackRepository trackRepository
+    ) {
         this.redisTemplate = redisTemplate;
         this.trackRepository = trackRepository;
     }
