@@ -12,21 +12,20 @@ import tools.jackson.databind.json.JsonMapper;
 @Configuration
 public class RedisConfig {
 
-    @Bean
-    public JsonMapper customJsonMapper() {
+    private JsonMapper customJsonMapper() {
         return JsonMapper.builder()
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                 .build();
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory,
-                                                       JsonMapper customJsonMapper) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
 
+        JsonMapper mapper = customJsonMapper();
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJacksonJsonRedisSerializer(customJsonMapper));
+        template.setValueSerializer(new GenericJacksonJsonRedisSerializer(mapper));
 
         return template;
 

@@ -28,6 +28,8 @@ services:
       - REDIS_HOST=redis
     env_file:
       - .env
+    volumes:
+      - ./python_worker:/app
 
 volumes:
     pg_data:

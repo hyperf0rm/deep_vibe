@@ -9,7 +9,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "scrobbles",
-       uniqueConstraints = { @UniqueConstraint(columnNames = {"user", "track_id", "played_at"}) },
+       uniqueConstraints = { @UniqueConstraint(columnNames = {"user_id", "track_id", "played_at"}) },
        indexes = { @Index(name = "idx_played_at", columnList = "played_at") })
 public class Scrobble {
     @Id

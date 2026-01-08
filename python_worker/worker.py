@@ -3,9 +3,23 @@ import requests
 import io
 import redis
 import os
+import logging
+import sys
 from pydub import AudioSegment
-import time
 import json
+
+LOG_FILE = "worker_crash.log"
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8')
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+logger.addHandler(file_handler)
+
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setFormatter(logging.Formatter('[WORKER] %(message)s'))
+logger.addHandler(console_handler)
 
 TASK_QUEUE_NAME = "analyze_audio_task_queue"
 RESULTS_QUEUE_NAME = "results_queue"
@@ -43,7 +57,6 @@ def main():
                 }
                 result = json.dumps(track)
                 r.lpush(RESULTS_QUEUE_NAME, result)
-                time.sleep(5)
         except Exception as e:
             print(f"Worker error during track analysis: {e}")
 

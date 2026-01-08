@@ -9,6 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class ResultFromWorkerConsumer {
@@ -25,17 +27,22 @@ public class ResultFromWorkerConsumer {
         this.trackRepository = trackRepository;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000L)
     public void getResultFromQueue() {
 
-        while (true) {
+        if (queueIsNotEmpty()) {
             Object obj = redisTemplate.opsForList().rightPop(QUEUE_NAME);
             ResultFromWorker result = (ResultFromWorker) obj;
             System.out.printf(result.toString());
-            Track track = trackRepository.findById(result.id());
+            Optional<Track> trackOptional = trackRepository.findById(result.id());
+            Track track = trackOptional.orElseThrow();
             track.setBpm(result.bpm());
             trackRepository.save(track);
         }
+    }
 
+    public boolean queueIsNotEmpty() {
+        Long queueSize = redisTemplate.opsForList().size(QUEUE_NAME);
+        return queueSize != null && queueSize > 0;
     }
 }
