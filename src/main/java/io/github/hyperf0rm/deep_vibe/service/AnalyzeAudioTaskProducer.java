@@ -28,7 +28,7 @@ public class AnalyzeAudioTaskProducer {
         this.trackRepository = trackRepository;
     }
 
-    @Scheduled(fixedDelay = 1000L)
+    @Scheduled(fixedDelay = 1000)
     public void sendTaskToQueue() {
 
         List<Track> tracks = trackRepository.findByPreviewUrlIsNotNullAndStatus(TrackQueueStatus.NEW);

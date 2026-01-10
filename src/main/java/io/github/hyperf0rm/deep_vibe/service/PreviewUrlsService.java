@@ -30,7 +30,7 @@ public class PreviewUrlsService {
         this.trackRepository = trackRepository;
     }
 
-    @Scheduled(fixedDelay = 1000L)
+    @Scheduled(fixedDelay = 1000)
     public void findPreviewUrls() {
         List<Track> tracks = trackRepository.findByPreviewUrlIsNull();
 
@@ -68,7 +68,7 @@ public class PreviewUrlsService {
                     }
                 }
                 try {
-                    Thread.sleep(3000L);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     log.error("Error during thread.sleep", e);
                 }

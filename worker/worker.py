@@ -39,8 +39,13 @@ def main():
             if task:
                 queue, item = task
                 print(f"queue: {queue}, task: {item}")
-                track_id = item["id"]
-                url = item["preview_url"]
+                task_data = json.loads(item)
+
+                track_id = task_data["id"]
+                url = task_data["preview_url"]
+
+                print(f"Processing track {track_id}")
+
                 response = requests.get(url)
                 response.raise_for_status()
                 audio_file = io.BytesIO(response.content)
@@ -56,8 +61,15 @@ def main():
                     "bpm": bpm
                 }
                 result = json.dumps(track)
+                print(f"Pushing to redis queue: {result}")
                 r.lpush(RESULTS_QUEUE_NAME, result)
+                print(f"Completed track {track_id} with BPM: {bpm}")
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
+            print(f"Item was: {repr(item)}")
         except Exception as e:
             print(f"Worker error during track analysis: {e}")
+            import traceback
+            traceback.print_exc()
 
 main()
