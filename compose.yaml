@@ -20,7 +20,7 @@ services:
     volumes:
       - redis_data:/data
   worker:
-    build: ./python_worker
+    build: ./worker
     restart: always
     depends_on:
       - redis
@@ -29,7 +29,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./python_worker:/app
+      - ./worker:/app
 
 volumes:
     pg_data:

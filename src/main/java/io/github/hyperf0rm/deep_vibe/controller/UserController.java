@@ -1,15 +1,13 @@
 package io.github.hyperf0rm.deep_vibe.controller;
 
-import io.github.hyperf0rm.deep_vibe.dto.PreviewUrlsResponse;
-import io.github.hyperf0rm.deep_vibe.dto.LastFmResponse;
-import io.github.hyperf0rm.deep_vibe.dto.UserCreateRequest;
-import io.github.hyperf0rm.deep_vibe.dto.UserResponse;
+import io.github.hyperf0rm.deep_vibe.dto.*;
 import io.github.hyperf0rm.deep_vibe.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.entity.Track;
 import io.github.hyperf0rm.deep_vibe.entity.User;
 import io.github.hyperf0rm.deep_vibe.repository.ScrobbleRepository;
 import io.github.hyperf0rm.deep_vibe.repository.TrackRepository;
 import io.github.hyperf0rm.deep_vibe.repository.UserRepository;
+import io.github.hyperf0rm.deep_vibe.service.AnalyticsService;
 import io.github.hyperf0rm.deep_vibe.service.LastFmService;
 import io.github.hyperf0rm.deep_vibe.service.PreviewUrlsService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,18 +28,21 @@ public class UserController {
     private final TrackRepository trackRepository;
     private final ScrobbleRepository scrobbleRepository;
     private final PreviewUrlsService previewUrlsService;
+    private final AnalyticsService analyticsService;
 
     public UserController(
             UserRepository userRepository,
             LastFmService service,
             TrackRepository trackRepository,
             ScrobbleRepository scrobbleRepository,
-            PreviewUrlsService previewUrlsService) {
+            PreviewUrlsService previewUrlsService,
+            AnalyticsService analyticsService) {
         this.userRepository = userRepository;
         this.lastFmService = service;
         this.trackRepository = trackRepository;
         this.scrobbleRepository = scrobbleRepository;
         this.previewUrlsService = previewUrlsService;
+        this.analyticsService = analyticsService;
     }
 
     @PostMapping(path = "/add")
@@ -81,5 +82,10 @@ public class UserController {
     @GetMapping(path = "/tracks/geturl")
     public void getUrls() {
         previewUrlsService.findPreviewUrls();
+    }
+
+    @GetMapping(path = "/analyze/{username}")
+    public AverageBpmResponse analyzeUserScrobbles(@PathVariable String username) {
+        return analyticsService.calculateAverageBpm(username);
     }
 }

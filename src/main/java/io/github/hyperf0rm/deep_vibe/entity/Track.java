@@ -3,6 +3,9 @@ package io.github.hyperf0rm.deep_vibe.entity;
 import io.github.hyperf0rm.deep_vibe.enums.TrackQueueStatus;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tracks",
        uniqueConstraints = { @UniqueConstraint(columnNames = {"name", "artistName"}) })
@@ -24,6 +27,8 @@ public class Track {
     // private String key;
     // private ... spectralCentroid;
 
+    @OneToMany(mappedBy = "track", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Scrobble> scrobbles = new ArrayList<>();
 
     public Long getId() {
         return id;

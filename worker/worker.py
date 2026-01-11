@@ -27,24 +27,24 @@ RESULTS_QUEUE_NAME = "results_queue"
 def main():
     try:
         redis_host = os.getenv('REDIS_HOST', 'localhost')
-        print(f"Connecting to Redis at: {redis_host}")
+        logging.info(f"Connecting to Redis at: {redis_host}")
         r = redis.Redis(host=redis_host, port=6379, decode_responses=True)
         r.ping()
-        print("Connected to Redis successfully")
+        logging.info("Connected to Redis successfully")
     except Exception as e:
-        print(f"Failed to connect to Redis: {e}")
+        logging.error(f"Failed to connect to Redis: {e}")
     while True:
         try:
             task = r.brpop(keys=[TASK_QUEUE_NAME], timeout=0)
             if task:
                 queue, item = task
-                print(f"queue: {queue}, task: {item}")
+                logging.info(f"queue: {queue}, task: {item}")
                 task_data = json.loads(item)
 
                 track_id = task_data["id"]
                 url = task_data["preview_url"]
 
-                print(f"Processing track {track_id}")
+                logging.info(f"Processing track {track_id}")
 
                 response = requests.get(url)
                 response.raise_for_status()
@@ -61,14 +61,14 @@ def main():
                     "bpm": bpm
                 }
                 result = json.dumps(track)
-                print(f"Pushing to redis queue: {result}")
+                logging.info(f"Pushing to redis queue: {result}")
                 r.lpush(RESULTS_QUEUE_NAME, result)
-                print(f"Completed track {track_id} with BPM: {bpm}")
+                logging.info(f"Completed track {track_id} with BPM: {bpm}")
         except json.JSONDecodeError as e:
-            print(f"JSON decode error: {e}")
-            print(f"Item was: {repr(item)}")
+            logging.error(f"JSON decode error: {e}")
+            logging.error(f"Item was: {repr(item)}")
         except Exception as e:
-            print(f"Worker error during track analysis: {e}")
+            logging.error(f"Worker error during track analysis: {e}")
             import traceback
             traceback.print_exc()
 
