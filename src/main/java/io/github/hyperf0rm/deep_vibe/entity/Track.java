@@ -94,6 +94,14 @@ public class Track {
         this.rms = rms;
     }
 
+    public List<Scrobble> getScrobbles() {
+        return scrobbles;
+    }
+
+    public void setScrobbles(List<Scrobble> scrobbles) {
+        this.scrobbles = scrobbles;
+    }
+
     @Override
     public String toString() {
         return this.artistName + " - " + this.name;

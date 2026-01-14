@@ -1,0 +1,316 @@
+2026-01-15 12:42:20,590 - INFO - Connecting to Redis at: redis
+2026-01-15 12:42:20,609 - INFO - Connected to Redis successfully
+2026-01-15 12:42:20,615 - INFO - queue: analyze_audio_task_queue, task: {"id":1,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/05/1e/19/051e19a6-260b-8984-d458-da6f7a879133/mzaf_9137246788062547976.plus.aac.p.m4a"}
+2026-01-15 12:42:20,616 - INFO - Processing track 1
+2026-01-15 12:42:55,432 - INFO - Pushing to redis queue: {"id": 1, "bpm": 161}
+2026-01-15 12:42:55,434 - INFO - Completed track 1 with BPM: 161
+2026-01-15 12:42:55,440 - INFO - queue: analyze_audio_task_queue, task: {"id":2,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d6/d3/af/d6d3aff8-a2c2-7105-db34-ec641bcc03a3/mzaf_14895785185246758899.plus.aac.p.m4a"}
+2026-01-15 12:42:55,445 - INFO - Processing track 2
+2026-01-15 12:42:57,025 - INFO - Pushing to redis queue: {"id": 2, "bpm": 129}
+2026-01-15 12:42:57,028 - INFO - Completed track 2 with BPM: 129
+2026-01-15 12:42:57,034 - INFO - queue: analyze_audio_task_queue, task: {"id":3,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/17/ca/93/17ca9319-16c8-c5dc-0f7e-5f4a448c0945/mzaf_17891663391825600848.plus.aac.p.m4a"}
+2026-01-15 12:42:57,038 - INFO - Processing track 3
+2026-01-15 12:42:58,640 - INFO - Pushing to redis queue: {"id": 3, "bpm": 108}
+2026-01-15 12:42:58,644 - INFO - Completed track 3 with BPM: 108
+2026-01-15 12:42:58,646 - INFO - queue: analyze_audio_task_queue, task: {"id":4,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/27/3f/1f/273f1f32-b8c5-60d2-73f5-0b2ef0b4fdf9/mzaf_8777525596351813432.plus.aac.p.m4a"}
+2026-01-15 12:42:58,651 - INFO - Processing track 4
+2026-01-15 12:43:02,101 - INFO - Pushing to redis queue: {"id": 4, "bpm": 117}
+2026-01-15 12:43:02,104 - INFO - Completed track 4 with BPM: 117
+2026-01-15 12:43:02,108 - INFO - queue: analyze_audio_task_queue, task: {"id":5,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/05/90/cc/0590cca1-0e30-2f73-caba-4ff01beb3a18/mzaf_11155656577338791966.plus.aac.p.m4a"}
+2026-01-15 12:43:02,109 - INFO - Processing track 5
+2026-01-15 12:43:05,652 - INFO - Pushing to redis queue: {"id": 5, "bpm": 117}
+2026-01-15 12:43:05,653 - INFO - Completed track 5 with BPM: 117
+2026-01-15 12:43:05,656 - INFO - queue: analyze_audio_task_queue, task: {"id":6,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/27/86/48/278648f7-a828-0ba3-36cd-d012bf4e4996/mzaf_2769419025880789182.plus.aac.p.m4a"}
+2026-01-15 12:43:05,658 - INFO - Processing track 6
+2026-01-15 12:43:09,104 - INFO - Pushing to redis queue: {"id": 6, "bpm": 129}
+2026-01-15 12:43:09,108 - INFO - Completed track 6 with BPM: 129
+2026-01-15 12:43:09,110 - INFO - queue: analyze_audio_task_queue, task: {"id":7,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1e/7e/ec/1e7eecbd-4242-0bbf-401b-6c214f72824b/mzaf_9327919575950713854.plus.aac.p.m4a"}
+2026-01-15 12:43:09,110 - INFO - Processing track 7
+2026-01-15 12:43:13,358 - INFO - Pushing to redis queue: {"id": 7, "bpm": 123}
+2026-01-15 12:43:13,359 - INFO - Completed track 7 with BPM: 123
+2026-01-15 12:43:13,368 - INFO - queue: analyze_audio_task_queue, task: {"id":8,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2d/c2/e8/2dc2e882-ecda-bda9-c206-4b2e7445933f/mzaf_17272370243607666535.plus.aac.p.m4a"}
+2026-01-15 12:43:13,369 - INFO - Processing track 8
+2026-01-15 12:43:16,525 - INFO - Pushing to redis queue: {"id": 8, "bpm": 123}
+2026-01-15 12:43:16,526 - INFO - Completed track 8 with BPM: 123
+2026-01-15 12:43:16,527 - INFO - queue: analyze_audio_task_queue, task: {"id":10,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a7/c9/09/a7c90944-f1dc-5055-5de1-a97b7e031fd4/mzaf_14698504894394295915.plus.aac.p.m4a"}
+2026-01-15 12:43:16,528 - INFO - Processing track 10
+2026-01-15 12:43:20,096 - INFO - Pushing to redis queue: {"id": 10, "bpm": 103}
+2026-01-15 12:43:20,100 - INFO - Completed track 10 with BPM: 103
+2026-01-15 12:43:20,101 - INFO - queue: analyze_audio_task_queue, task: {"id":11,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/7b/97/3f/7b973f4f-2858-cc7d-4cc6-96b104cf65fd/mzaf_522908214498893993.plus.aac.p.m4a"}
+2026-01-15 12:43:20,102 - INFO - Processing track 11
+2026-01-15 12:43:21,708 - INFO - Pushing to redis queue: {"id": 11, "bpm": 112}
+2026-01-15 12:43:21,710 - INFO - Completed track 11 with BPM: 112
+2026-01-15 12:43:21,715 - INFO - queue: analyze_audio_task_queue, task: {"id":12,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c1/69/5a/c1695a20-7477-fd97-ddf1-817ea6a92333/mzaf_10567460492803376420.plus.aac.p.m4a"}
+2026-01-15 12:43:21,716 - INFO - Processing track 12
+2026-01-15 12:43:23,817 - INFO - Pushing to redis queue: {"id": 12, "bpm": 103}
+2026-01-15 12:43:23,818 - INFO - Completed track 12 with BPM: 103
+2026-01-15 12:43:23,828 - INFO - queue: analyze_audio_task_queue, task: {"id":13,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/4f/d1/2b/4fd12be5-8df7-b425-c7f6-84ddad8c1e40/mzaf_11506892905765192974.plus.aac.p.m4a"}
+2026-01-15 12:43:23,833 - INFO - Processing track 13
+2026-01-15 12:43:25,465 - INFO - Pushing to redis queue: {"id": 13, "bpm": 99}
+2026-01-15 12:43:25,468 - INFO - Completed track 13 with BPM: 99
+2026-01-15 12:43:25,469 - INFO - queue: analyze_audio_task_queue, task: {"id":14,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/1f/d5/3b/1fd53bb1-9921-e869-c17a-62244569d678/mzaf_12197982873986281039.plus.aac.p.m4a"}
+2026-01-15 12:43:25,469 - INFO - Processing track 14
+2026-01-15 12:43:27,093 - INFO - Pushing to redis queue: {"id": 14, "bpm": 129}
+2026-01-15 12:43:27,096 - INFO - Completed track 14 with BPM: 129
+2026-01-15 12:43:27,098 - INFO - queue: analyze_audio_task_queue, task: {"id":15,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/47/d0/26/47d0265c-382b-8260-3d21-4d57dbfae8c8/mzaf_9806455787634696481.plus.aac.p.m4a"}
+2026-01-15 12:43:27,100 - INFO - Processing track 15
+2026-01-15 12:43:28,946 - INFO - Pushing to redis queue: {"id": 15, "bpm": 108}
+2026-01-15 12:43:28,947 - INFO - Completed track 15 with BPM: 108
+2026-01-15 12:43:28,952 - INFO - queue: analyze_audio_task_queue, task: {"id":16,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/45/0a/5a/450a5afd-ca24-c61e-9660-d323d139dda9/mzaf_1090340136781958187.plus.aac.p.m4a"}
+2026-01-15 12:43:28,954 - INFO - Processing track 16
+2026-01-15 12:43:32,641 - INFO - Pushing to redis queue: {"id": 16, "bpm": 117}
+2026-01-15 12:43:32,642 - INFO - Completed track 16 with BPM: 117
+2026-01-15 12:43:32,643 - INFO - queue: analyze_audio_task_queue, task: {"id":17,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/cd/5b/77/cd5b77bf-48af-6db4-65b0-916f9d77d36d/mzaf_2637549748527553227.plus.aac.p.m4a"}
+2026-01-15 12:43:32,644 - INFO - Processing track 17
+2026-01-15 12:43:36,165 - INFO - Pushing to redis queue: {"id": 17, "bpm": 99}
+2026-01-15 12:43:36,166 - INFO - Completed track 17 with BPM: 99
+2026-01-15 12:43:36,171 - INFO - queue: analyze_audio_task_queue, task: {"id":18,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/6b/a3/f6/6ba3f685-59fa-17d6-ef58-ad1e7548bd53/mzaf_860780721485739212.plus.aac.p.m4a"}
+2026-01-15 12:43:36,174 - INFO - Processing track 18
+2026-01-15 12:43:38,021 - INFO - Pushing to redis queue: {"id": 18, "bpm": 161}
+2026-01-15 12:43:38,022 - INFO - Completed track 18 with BPM: 161
+2026-01-15 12:43:38,027 - INFO - queue: analyze_audio_task_queue, task: {"id":19,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c9/75/f6/c975f64c-4948-b382-0295-27c15fcccd1e/mzaf_7951154920175705184.plus.aac.p.m4a"}
+2026-01-15 12:43:38,027 - INFO - Processing track 19
+2026-01-15 12:43:39,956 - INFO - Pushing to redis queue: {"id": 19, "bpm": 199}
+2026-01-15 12:43:39,957 - INFO - Completed track 19 with BPM: 199
+2026-01-15 12:43:39,963 - INFO - queue: analyze_audio_task_queue, task: {"id":21,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/16/7a/cb/167acb8a-cbd4-40a6-61ca-4dc00db3546d/mzaf_12037248033286940967.plus.aac.p.m4a"}
+2026-01-15 12:43:39,964 - INFO - Processing track 21
+2026-01-15 12:43:41,574 - INFO - Pushing to redis queue: {"id": 21, "bpm": 117}
+2026-01-15 12:43:41,575 - INFO - Completed track 21 with BPM: 117
+2026-01-15 12:43:41,576 - INFO - queue: analyze_audio_task_queue, task: {"id":22,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/5d/e7/23/5de72324-53a4-4a4c-f01a-b47fde5cd8c4/mzaf_7769245370581212999.plus.aac.p.m4a"}
+2026-01-15 12:43:41,577 - INFO - Processing track 22
+2026-01-15 12:43:45,913 - INFO - Pushing to redis queue: {"id": 22, "bpm": 123}
+2026-01-15 12:43:45,914 - INFO - Completed track 22 with BPM: 123
+2026-01-15 12:43:45,918 - INFO - queue: analyze_audio_task_queue, task: {"id":23,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/8a/cc/cf/8acccf2a-7f93-04c8-f7ba-a32314d9c3cb/mzaf_10091915838695989541.plus.aac.p.m4a"}
+2026-01-15 12:43:45,919 - INFO - Processing track 23
+2026-01-15 12:43:49,536 - INFO - Pushing to redis queue: {"id": 23, "bpm": 92}
+2026-01-15 12:43:49,537 - INFO - Completed track 23 with BPM: 92
+2026-01-15 12:43:49,538 - INFO - queue: analyze_audio_task_queue, task: {"id":24,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/c7/81/53/c7815349-6452-d931-0ec5-601c5b42ace0/mzaf_15344987668362031498.plus.aac.p.m4a"}
+2026-01-15 12:43:49,538 - INFO - Processing track 24
+2026-01-15 12:43:51,221 - INFO - Pushing to redis queue: {"id": 24, "bpm": 112}
+2026-01-15 12:43:51,222 - INFO - Completed track 24 with BPM: 112
+2026-01-15 12:43:51,227 - INFO - queue: analyze_audio_task_queue, task: {"id":27,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/c4/2b/b9/c42bb9ed-be7d-32dc-9295-1a2afc00f9c6/mzaf_10979575453592396739.plus.aac.p.m4a"}
+2026-01-15 12:43:51,228 - INFO - Processing track 27
+2026-01-15 12:43:53,484 - INFO - Pushing to redis queue: {"id": 27, "bpm": 172}
+2026-01-15 12:43:53,485 - INFO - Completed track 27 with BPM: 172
+2026-01-15 12:43:53,491 - INFO - queue: analyze_audio_task_queue, task: {"id":28,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/ae/97/6e/ae976e3f-f512-4450-9ca3-f741d6cf38bc/mzaf_13176631397804752088.plus.aac.p.m4a"}
+2026-01-15 12:43:53,491 - INFO - Processing track 28
+2026-01-15 12:43:57,020 - INFO - Pushing to redis queue: {"id": 28, "bpm": 117}
+2026-01-15 12:43:57,026 - INFO - Completed track 28 with BPM: 117
+2026-01-15 12:43:57,030 - INFO - queue: analyze_audio_task_queue, task: {"id":29,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/8a/e2/26/8ae2260a-4ff5-0b5d-5f81-cf50f0d830e7/mzaf_10203944789299935096.plus.aac.p.m4a"}
+2026-01-15 12:43:57,031 - INFO - Processing track 29
+2026-01-15 12:44:00,572 - INFO - Pushing to redis queue: {"id": 29, "bpm": 99}
+2026-01-15 12:44:00,573 - INFO - Completed track 29 with BPM: 99
+2026-01-15 12:44:00,577 - INFO - queue: analyze_audio_task_queue, task: {"id":30,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/6d/b7/4a/6db74ade-499c-a672-feaa-73d7a2091e6d/mzaf_10117444567253321708.plus.aac.p.m4a"}
+2026-01-15 12:44:00,577 - INFO - Processing track 30
+2026-01-15 12:44:04,099 - INFO - Pushing to redis queue: {"id": 30, "bpm": 86}
+2026-01-15 12:44:04,100 - INFO - Completed track 30 with BPM: 86
+2026-01-15 12:44:04,105 - INFO - queue: analyze_audio_task_queue, task: {"id":31,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/bb/1e/9e/bb1e9ea8-a9b1-2b43-1b42-acee1a492f83/mzaf_18203947458384806473.plus.aac.p.m4a"}
+2026-01-15 12:44:04,106 - INFO - Processing track 31
+2026-01-15 12:44:07,887 - INFO - Pushing to redis queue: {"id": 31, "bpm": 96}
+2026-01-15 12:44:07,889 - INFO - Completed track 31 with BPM: 96
+2026-01-15 12:44:07,893 - INFO - queue: analyze_audio_task_queue, task: {"id":32,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/75/ff/b5/75ffb555-15fb-207a-ecef-4f6587971503/mzaf_4020464079483846437.plus.aac.p.m4a"}
+2026-01-15 12:44:07,893 - INFO - Processing track 32
+2026-01-15 12:44:09,571 - INFO - Pushing to redis queue: {"id": 32, "bpm": 129}
+2026-01-15 12:44:09,582 - INFO - Completed track 32 with BPM: 129
+2026-01-15 12:44:09,585 - INFO - queue: analyze_audio_task_queue, task: {"id":33,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/08/da/92/08da9272-8736-0a8b-c092-56bffe21a8e0/mzaf_2808923574775758795.plus.aac.p.m4a"}
+2026-01-15 12:44:09,589 - INFO - Processing track 33
+2026-01-15 12:44:11,201 - INFO - Pushing to redis queue: {"id": 33, "bpm": 144}
+2026-01-15 12:44:11,202 - INFO - Completed track 33 with BPM: 144
+2026-01-15 12:44:11,205 - INFO - queue: analyze_audio_task_queue, task: {"id":34,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/8b/eb/fe/8bebfe9e-ede9-f988-c808-c8304a24280f/mzaf_16455596846136760510.plus.aac.p.m4a"}
+2026-01-15 12:44:11,207 - INFO - Processing track 34
+2026-01-15 12:44:14,628 - INFO - Pushing to redis queue: {"id": 34, "bpm": 99}
+2026-01-15 12:44:14,629 - INFO - Completed track 34 with BPM: 99
+2026-01-15 12:44:14,633 - INFO - queue: analyze_audio_task_queue, task: {"id":35,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/18/df/a3/18dfa393-b93f-e9da-0f4c-3c5ff5d4e053/mzaf_3094363118736351954.plus.aac.p.m4a"}
+2026-01-15 12:44:14,633 - INFO - Processing track 35
+2026-01-15 12:44:18,435 - INFO - Pushing to redis queue: {"id": 35, "bpm": 123}
+2026-01-15 12:44:18,437 - INFO - Completed track 35 with BPM: 123
+2026-01-15 12:44:18,438 - INFO - queue: analyze_audio_task_queue, task: {"id":36,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/e9/6c/c2/e96cc290-2f8a-15ac-ff0d-903c555cbcb6/mzaf_6332594628601601451.plus.aac.p.m4a"}
+2026-01-15 12:44:18,438 - INFO - Processing track 36
+2026-01-15 12:44:20,076 - INFO - Pushing to redis queue: {"id": 36, "bpm": 161}
+2026-01-15 12:44:20,080 - INFO - Completed track 36 with BPM: 161
+2026-01-15 12:44:20,085 - INFO - queue: analyze_audio_task_queue, task: {"id":38,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/46/6b/59/466b59fd-c818-f6b2-a80d-17a762c360cb/mzaf_16466420954967333175.plus.aac.p.m4a"}
+2026-01-15 12:44:20,087 - INFO - Processing track 38
+2026-01-15 12:44:21,894 - INFO - Pushing to redis queue: {"id": 38, "bpm": 144}
+2026-01-15 12:44:21,895 - INFO - Completed track 38 with BPM: 144
+2026-01-15 12:44:21,906 - INFO - queue: analyze_audio_task_queue, task: {"id":39,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/e0/9f/e4/e09fe4a8-69d2-3126-ef98-2428dc2e0095/mzaf_11602239856113385144.plus.aac.p.m4a"}
+2026-01-15 12:44:21,907 - INFO - Processing track 39
+2026-01-15 12:44:25,321 - INFO - Pushing to redis queue: {"id": 39, "bpm": 83}
+2026-01-15 12:44:25,322 - INFO - Completed track 39 with BPM: 83
+2026-01-15 12:44:25,325 - INFO - queue: analyze_audio_task_queue, task: {"id":40,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/ca/93/88/ca938811-dfe9-cb0a-a2ac-509931ff57f2/mzaf_17995705707950995850.plus.aac.p.m4a"}
+2026-01-15 12:44:25,326 - INFO - Processing track 40
+2026-01-15 12:44:28,902 - INFO - Pushing to redis queue: {"id": 40, "bpm": 144}
+2026-01-15 12:44:28,905 - INFO - Completed track 40 with BPM: 144
+2026-01-15 12:44:28,906 - INFO - queue: analyze_audio_task_queue, task: {"id":41,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/59/51/e1/5951e126-6c37-81c0-6b31-cdb44ba4947d/mzaf_13114631278126712731.plus.aac.p.m4a"}
+2026-01-15 12:44:28,906 - INFO - Processing track 41
+2026-01-15 12:44:31,990 - INFO - Pushing to redis queue: {"id": 41, "bpm": 74}
+2026-01-15 12:44:31,991 - INFO - Completed track 41 with BPM: 74
+2026-01-15 12:44:31,996 - INFO - queue: analyze_audio_task_queue, task: {"id":42,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/e2/9e/d3/e29ed3c0-c3f2-fc74-d621-28ffabcd028d/mzaf_726628299856760245.plus.aac.p.m4a"}
+2026-01-15 12:44:31,996 - INFO - Processing track 42
+2026-01-15 12:44:33,805 - INFO - Pushing to redis queue: {"id": 42, "bpm": 123}
+2026-01-15 12:44:33,807 - INFO - Completed track 42 with BPM: 123
+2026-01-15 12:44:33,810 - INFO - queue: analyze_audio_task_queue, task: {"id":43,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/6e/ac/d0/6eacd032-3e83-9619-5d5d-ff2fba527725/mzaf_8005828966005881457.plus.aac.p.m4a"}
+2026-01-15 12:44:33,811 - INFO - Processing track 43
+2026-01-15 12:44:35,584 - INFO - Pushing to redis queue: {"id": 43, "bpm": 103}
+2026-01-15 12:44:35,585 - INFO - Completed track 43 with BPM: 103
+2026-01-15 12:44:35,586 - INFO - queue: analyze_audio_task_queue, task: {"id":44,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/16/81/e2/1681e209-96d8-ef05-e5d7-7e3d47251595/mzaf_12125807204004276141.plus.aac.p.m4a"}
+2026-01-15 12:44:35,586 - INFO - Processing track 44
+2026-01-15 12:44:37,291 - INFO - Pushing to redis queue: {"id": 44, "bpm": 108}
+2026-01-15 12:44:37,292 - INFO - Completed track 44 with BPM: 108
+2026-01-15 12:44:37,297 - INFO - queue: analyze_audio_task_queue, task: {"id":45,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/2e/6d/de/2e6dde0a-11c5-57d2-2a91-a38aff5623eb/mzaf_16482285812621694811.plus.aac.p.m4a"}
+2026-01-15 12:44:37,303 - INFO - Processing track 45
+2026-01-15 12:44:40,608 - INFO - Pushing to redis queue: {"id": 45, "bpm": 129}
+2026-01-15 12:44:40,611 - INFO - Completed track 45 with BPM: 129
+2026-01-15 12:44:40,612 - INFO - queue: analyze_audio_task_queue, task: {"id":46,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/0f/53/3c/0f533c62-d9bb-728c-65af-ed5c6b501c56/mzaf_8851164631871511062.plus.aac.p.m4a"}
+2026-01-15 12:44:40,613 - INFO - Processing track 46
+2026-01-15 12:44:42,256 - INFO - Pushing to redis queue: {"id": 46, "bpm": 136}
+2026-01-15 12:44:42,260 - INFO - Completed track 46 with BPM: 136
+2026-01-15 12:44:42,261 - INFO - queue: analyze_audio_task_queue, task: {"id":47,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/20/aa/34/20aa348d-0577-8658-1650-135f1ff6cd83/mzaf_4390661674072984600.plus.aac.p.m4a"}
+2026-01-15 12:44:42,261 - INFO - Processing track 47
+2026-01-15 12:44:44,031 - INFO - Pushing to redis queue: {"id": 47, "bpm": 117}
+2026-01-15 12:44:44,037 - INFO - Completed track 47 with BPM: 117
+2026-01-15 12:44:44,039 - INFO - queue: analyze_audio_task_queue, task: {"id":48,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/55/94/6c/55946c00-863a-392a-51bd-5fa80c100147/mzaf_7626832530155590741.plus.aac.p.m4a"}
+2026-01-15 12:44:44,040 - INFO - Processing track 48
+2026-01-15 12:44:47,487 - INFO - Pushing to redis queue: {"id": 48, "bpm": 117}
+2026-01-15 12:44:47,488 - INFO - Completed track 48 with BPM: 117
+2026-01-15 12:44:47,492 - INFO - queue: analyze_audio_task_queue, task: {"id":49,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/4a/6b/38/4a6b383e-49fc-3acf-b5f5-a9e38f2115a1/mzaf_6671564679546351586.plus.aac.p.m4a"}
+2026-01-15 12:44:47,493 - INFO - Processing track 49
+2026-01-15 12:44:51,094 - INFO - Pushing to redis queue: {"id": 49, "bpm": 108}
+2026-01-15 12:44:51,095 - INFO - Completed track 49 with BPM: 108
+2026-01-15 12:44:51,100 - INFO - queue: analyze_audio_task_queue, task: {"id":50,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview71/v4/92/32/f9/9232f98a-1c46-fa3c-bdc1-23fd61c890a9/mzaf_5266272580806071335.plus.aac.p.m4a"}
+2026-01-15 12:44:51,100 - INFO - Processing track 50
+2026-01-15 12:44:54,682 - INFO - Pushing to redis queue: {"id": 50, "bpm": 96}
+2026-01-15 12:44:54,683 - INFO - Completed track 50 with BPM: 96
+2026-01-15 12:44:54,686 - INFO - queue: analyze_audio_task_queue, task: {"id":51,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/82/eb/07/82eb07b4-2632-392f-cb87-a65f772981ff/mzaf_409809147322578116.plus.aac.p.m4a"}
+2026-01-15 12:44:54,687 - INFO - Processing track 51
+2026-01-15 12:44:57,710 - INFO - Pushing to redis queue: {"id": 51, "bpm": 103}
+2026-01-15 12:44:57,711 - INFO - Completed track 51 with BPM: 103
+2026-01-15 12:44:57,712 - INFO - queue: analyze_audio_task_queue, task: {"id":52,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/25/40/af/2540af71-8600-898d-fb64-b2df541ea395/mzaf_15347139756406154403.plus.aac.p.m4a"}
+2026-01-15 12:44:57,713 - INFO - Processing track 52
+2026-01-15 12:45:01,073 - INFO - Pushing to redis queue: {"id": 52, "bpm": 161}
+2026-01-15 12:45:01,078 - INFO - Completed track 52 with BPM: 161
+2026-01-15 12:45:01,082 - INFO - queue: analyze_audio_task_queue, task: {"id":53,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/15/a5/dd/15a5ddcf-5397-3a86-451a-26809571313b/mzaf_14122314438904419912.plus.aac.p.m4a"}
+2026-01-15 12:45:01,088 - INFO - Processing track 53
+2026-01-15 12:45:04,535 - INFO - Pushing to redis queue: {"id": 53, "bpm": 152}
+2026-01-15 12:45:04,538 - INFO - Completed track 53 with BPM: 152
+2026-01-15 12:45:04,539 - INFO - queue: analyze_audio_task_queue, task: {"id":54,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/3a/4e/46/3a4e461a-f511-be92-b3e3-8292a43bcb87/mzaf_3853405986752289248.plus.aac.p.m4a"}
+2026-01-15 12:45:04,540 - INFO - Processing track 54
+2026-01-15 12:45:07,952 - INFO - Pushing to redis queue: {"id": 54, "bpm": 112}
+2026-01-15 12:45:07,954 - INFO - Completed track 54 with BPM: 112
+2026-01-15 12:45:07,958 - INFO - queue: analyze_audio_task_queue, task: {"id":55,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview71/v4/81/9e/0a/819e0ad4-6c8c-ca66-40ff-1cb75b2de8e0/mzaf_408214203724167114.plus.aac.p.m4a"}
+2026-01-15 12:45:07,965 - INFO - Processing track 55
+2026-01-15 12:45:09,666 - INFO - Pushing to redis queue: {"id": 55, "bpm": 129}
+2026-01-15 12:45:09,667 - INFO - Completed track 55 with BPM: 129
+2026-01-15 12:45:09,670 - INFO - queue: analyze_audio_task_queue, task: {"id":56,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview62/v4/44/92/b9/4492b910-ad9f-d289-f94a-cdf30886c89d/mzaf_7763580401693102481.plus.aac.p.m4a"}
+2026-01-15 12:45:09,671 - INFO - Processing track 56
+2026-01-15 12:45:13,958 - INFO - Pushing to redis queue: {"id": 56, "bpm": 129}
+2026-01-15 12:45:13,963 - INFO - Completed track 56 with BPM: 129
+2026-01-15 12:45:13,967 - INFO - queue: analyze_audio_task_queue, task: {"id":57,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c9/d1/fd/c9d1fd37-a9ed-c541-73f1-a5e9db8a9810/mzaf_10194007800104283561.plus.aac.p.m4a"}
+2026-01-15 12:45:13,970 - INFO - Processing track 57
+2026-01-15 12:45:17,337 - INFO - Pushing to redis queue: {"id": 57, "bpm": 108}
+2026-01-15 12:45:17,338 - INFO - Completed track 57 with BPM: 108
+2026-01-15 12:45:17,342 - INFO - queue: analyze_audio_task_queue, task: {"id":58,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/7d/1c/06/7d1c065e-5913-f8ac-30eb-77aa7ce7730e/mzaf_6650854830930728515.plus.aac.p.m4a"}
+2026-01-15 12:45:17,343 - INFO - Processing track 58
+2026-01-15 12:45:20,809 - INFO - Pushing to redis queue: {"id": 58, "bpm": 117}
+2026-01-15 12:45:20,811 - INFO - Completed track 58 with BPM: 117
+2026-01-15 12:45:20,813 - INFO - queue: analyze_audio_task_queue, task: {"id":60,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/03/fd/ad/03fdad60-7aa9-1f36-1c8b-e3abc47822c9/mzaf_13395895096994478337.plus.aac.p.m4a"}
+2026-01-15 12:45:20,814 - INFO - Processing track 60
+2026-01-15 12:45:24,388 - INFO - Pushing to redis queue: {"id": 60, "bpm": 144}
+2026-01-15 12:45:24,390 - INFO - Completed track 60 with BPM: 144
+2026-01-15 12:45:24,394 - INFO - queue: analyze_audio_task_queue, task: {"id":61,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/83/6c/11/836c1128-715b-8197-a881-0aff15ffa00d/mzaf_17287476308266004834.plus.aac.p.m4a"}
+2026-01-15 12:45:24,394 - INFO - Processing track 61
+2026-01-15 12:45:28,062 - INFO - Pushing to redis queue: {"id": 61, "bpm": 123}
+2026-01-15 12:45:28,065 - INFO - Completed track 61 with BPM: 123
+2026-01-15 12:45:28,066 - INFO - queue: analyze_audio_task_queue, task: {"id":62,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/a6/58/9f/a6589f44-0a5c-b744-bc1a-b50497bbfb08/mzaf_12524139779184230480.plus.aac.p.m4a"}
+2026-01-15 12:45:28,068 - INFO - Processing track 62
+2026-01-15 12:45:30,127 - INFO - Pushing to redis queue: {"id": 62, "bpm": 129}
+2026-01-15 12:45:30,128 - INFO - Completed track 62 with BPM: 129
+2026-01-15 12:45:30,133 - INFO - queue: analyze_audio_task_queue, task: {"id":63,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/36/37/62/363762b3-422b-6ec3-8c57-dd5170f6b0d4/mzaf_7609711705822172459.plus.aac.p.m4a"}
+2026-01-15 12:45:30,137 - INFO - Processing track 63
+2026-01-15 12:45:33,515 - INFO - Pushing to redis queue: {"id": 63, "bpm": 123}
+2026-01-15 12:45:33,516 - INFO - Completed track 63 with BPM: 123
+2026-01-15 12:45:33,521 - INFO - queue: analyze_audio_task_queue, task: {"id":64,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/f1/a6/54/f1a654b7-8f7e-7d14-c291-7524577276e9/mzaf_16058865187395318188.plus.aac.p.m4a"}
+2026-01-15 12:45:33,522 - INFO - Processing track 64
+2026-01-15 12:45:37,134 - INFO - Pushing to redis queue: {"id": 64, "bpm": 89}
+2026-01-15 12:45:37,137 - INFO - Completed track 64 with BPM: 89
+2026-01-15 12:45:37,138 - INFO - queue: analyze_audio_task_queue, task: {"id":65,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/04/17/53/04175319-a378-399a-9261-d063f8dd4e06/mzaf_3436518734100863017.plus.aac.p.m4a"}
+2026-01-15 12:45:37,138 - INFO - Processing track 65
+2026-01-15 12:45:40,479 - INFO - Pushing to redis queue: {"id": 65, "bpm": 117}
+2026-01-15 12:45:40,480 - INFO - Completed track 65 with BPM: 117
+2026-01-15 12:45:40,484 - INFO - queue: analyze_audio_task_queue, task: {"id":66,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/2b/c1/c3/2bc1c3b9-b5e0-0c1c-a2ac-49c7f8e4b079/mzaf_17881043437014493079.plus.aac.p.m4a"}
+2026-01-15 12:45:40,487 - INFO - Processing track 66
+2026-01-15 12:45:43,797 - INFO - Pushing to redis queue: {"id": 66, "bpm": 161}
+2026-01-15 12:45:43,801 - INFO - Completed track 66 with BPM: 161
+2026-01-15 12:45:43,802 - INFO - queue: analyze_audio_task_queue, task: {"id":67,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/16/10/55/16105529-aa3d-0180-8266-cfd80f7454fd/mzaf_641879170619819357.plus.aac.p.m4a"}
+2026-01-15 12:45:43,802 - INFO - Processing track 67
+2026-01-15 12:45:45,532 - INFO - Pushing to redis queue: {"id": 67, "bpm": 123}
+2026-01-15 12:45:45,534 - INFO - Completed track 67 with BPM: 123
+2026-01-15 12:45:45,536 - INFO - queue: analyze_audio_task_queue, task: {"id":68,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/dc/73/f4/dc73f428-1168-0c51-a72d-c749e7d59702/mzaf_4233861671654116484.plus.aac.p.m4a"}
+2026-01-15 12:45:45,537 - INFO - Processing track 68
+2026-01-15 12:45:49,263 - INFO - Pushing to redis queue: {"id": 68, "bpm": 108}
+2026-01-15 12:45:49,269 - INFO - Completed track 68 with BPM: 108
+2026-01-15 12:45:49,270 - INFO - queue: analyze_audio_task_queue, task: {"id":70,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/e6/f2/ef/e6f2ef5e-b289-f903-86ca-49f21c1c7cc1/mzaf_2721910773296038532.plus.aac.p.m4a"}
+2026-01-15 12:45:49,271 - INFO - Processing track 70
+2026-01-15 12:45:52,497 - INFO - Pushing to redis queue: {"id": 70, "bpm": 129}
+2026-01-15 12:45:52,506 - INFO - Completed track 70 with BPM: 129
+2026-01-15 12:45:52,507 - INFO - queue: analyze_audio_task_queue, task: {"id":71,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/38/65/6f/38656fe9-8807-f06e-478e-7fd3a04d3848/mzaf_17526847226595530093.plus.aac.p.m4a"}
+2026-01-15 12:45:52,507 - INFO - Processing track 71
+2026-01-15 12:45:54,119 - INFO - Pushing to redis queue: {"id": 71, "bpm": 123}
+2026-01-15 12:45:54,124 - INFO - Completed track 71 with BPM: 123
+2026-01-15 12:45:54,125 - INFO - queue: analyze_audio_task_queue, task: {"id":72,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/aa/e1/0b/aae10b3a-cfea-56a4-e23f-e7ff208dbcee/mzaf_6773393839294145596.plus.aac.p.m4a"}
+2026-01-15 12:45:54,126 - INFO - Processing track 72
+2026-01-15 12:45:57,648 - INFO - Pushing to redis queue: {"id": 72, "bpm": 136}
+2026-01-15 12:45:57,650 - INFO - Completed track 72 with BPM: 136
+2026-01-15 12:45:57,651 - INFO - queue: analyze_audio_task_queue, task: {"id":73,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/c0/8b/f9/c08bf978-df57-b7e7-b277-8a34dbd55c78/mzaf_10124844122366908296.plus.aac.p.m4a"}
+2026-01-15 12:45:57,651 - INFO - Processing track 73
+2026-01-15 12:46:02,354 - INFO - Pushing to redis queue: {"id": 73, "bpm": 172}
+2026-01-15 12:46:02,355 - INFO - Completed track 73 with BPM: 172
+2026-01-15 12:46:02,359 - INFO - queue: analyze_audio_task_queue, task: {"id":74,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview124/v4/4b/eb/d0/4bebd0c7-efc2-324d-637c-eaf469515170/mzaf_537089108733445985.plus.aac.p.m4a"}
+2026-01-15 12:46:02,360 - INFO - Processing track 74
+2026-01-15 12:46:06,884 - INFO - Pushing to redis queue: {"id": 74, "bpm": 96}
+2026-01-15 12:46:06,893 - INFO - Completed track 74 with BPM: 96
+2026-01-15 12:46:06,899 - INFO - queue: analyze_audio_task_queue, task: {"id":78,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/21/90/0c/21900cc9-0ec8-b81e-7cc1-902dc82c423d/mzaf_15678083652286431127.plus.aac.p.m4a"}
+2026-01-15 12:46:06,901 - INFO - Processing track 78
+2026-01-15 12:46:08,481 - INFO - Pushing to redis queue: {"id": 78, "bpm": 129}
+2026-01-15 12:46:08,483 - INFO - Completed track 78 with BPM: 129
+2026-01-15 12:46:08,484 - INFO - queue: analyze_audio_task_queue, task: {"id":80,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/de/17/d1/de17d1e5-3d8c-ec33-db22-bf176712fe72/mzaf_8290171771536769540.plus.aac.p.m4a"}
+2026-01-15 12:46:08,485 - INFO - Processing track 80
+2026-01-15 12:46:10,467 - INFO - Pushing to redis queue: {"id": 80, "bpm": 129}
+2026-01-15 12:46:10,468 - INFO - Completed track 80 with BPM: 129
+2026-01-15 12:46:10,471 - INFO - queue: analyze_audio_task_queue, task: {"id":82,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/79/c9/26/79c92658-3a64-e262-ae4b-58c97dd1a737/mzaf_12147544231871007078.plus.aac.p.m4a"}
+2026-01-15 12:46:10,473 - INFO - Processing track 82
+2026-01-15 12:46:14,107 - INFO - Pushing to redis queue: {"id": 82, "bpm": 117}
+2026-01-15 12:46:14,108 - INFO - Completed track 82 with BPM: 117
+2026-01-15 12:46:14,112 - INFO - queue: analyze_audio_task_queue, task: {"id":83,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/46/56/39/4656394b-cc35-439f-b782-2f81455dbdeb/mzaf_7861568644456476363.plus.aac.p.m4a"}
+2026-01-15 12:46:14,113 - INFO - Processing track 83
+2026-01-15 12:46:17,588 - INFO - Pushing to redis queue: {"id": 83, "bpm": 172}
+2026-01-15 12:46:17,591 - INFO - Completed track 83 with BPM: 172
+2026-01-15 12:46:17,592 - INFO - queue: analyze_audio_task_queue, task: {"id":84,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/ab/22/a7/ab22a729-a1c3-99c8-1b71-9dcdc3c2d11a/mzaf_2319323355984323256.plus.aac.p.m4a"}
+2026-01-15 12:46:17,593 - INFO - Processing track 84
+2026-01-15 12:46:19,307 - INFO - Pushing to redis queue: {"id": 84, "bpm": 81}
+2026-01-15 12:46:19,308 - INFO - Completed track 84 with BPM: 81
+2026-01-15 12:46:19,327 - INFO - queue: analyze_audio_task_queue, task: {"id":86,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview113/v4/27/82/90/278290bf-65f5-16e7-f39a-ed1a13b74403/mzaf_14822027828515999742.plus.aac.p.m4a"}
+2026-01-15 12:46:19,329 - INFO - Processing track 86
+2026-01-15 12:46:23,141 - INFO - Pushing to redis queue: {"id": 86, "bpm": 99}
+2026-01-15 12:46:23,142 - INFO - Completed track 86 with BPM: 99
+2026-01-15 12:46:23,144 - INFO - queue: analyze_audio_task_queue, task: {"id":87,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ad/11/ff/ad11ffe2-6856-08da-6a07-f9769b1932bc/mzaf_11992281227342896647.plus.aac.p.m4a"}
+2026-01-15 12:46:23,145 - INFO - Processing track 87
+2026-01-15 12:46:27,200 - INFO - Pushing to redis queue: {"id": 87, "bpm": 86}
+2026-01-15 12:46:27,203 - INFO - Completed track 87 with BPM: 86
+2026-01-15 12:46:27,204 - INFO - queue: analyze_audio_task_queue, task: {"id":88,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/41/7a/21/417a2175-88e2-ccd0-0384-277455eed55c/mzaf_3478832891822348393.plus.aac.p.m4a"}
+2026-01-15 12:46:27,211 - INFO - Processing track 88
+2026-01-15 12:46:30,532 - INFO - Pushing to redis queue: {"id": 88, "bpm": 86}
+2026-01-15 12:46:30,534 - INFO - Completed track 88 with BPM: 86
+2026-01-15 12:46:30,537 - INFO - queue: analyze_audio_task_queue, task: {"id":89,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/7c/6d/5e/7c6d5e9e-eb34-5a41-3433-0b4882c0252d/mzaf_15774953747953317018.plus.aac.p.m4a"}
+2026-01-15 12:46:30,537 - INFO - Processing track 89
+2026-01-15 12:46:33,872 - INFO - Pushing to redis queue: {"id": 89, "bpm": 70}
+2026-01-15 12:46:33,879 - INFO - Completed track 89 with BPM: 70
+2026-01-15 12:46:33,885 - INFO - queue: analyze_audio_task_queue, task: {"id":90,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ec/b7/f9/ecb7f9f7-3970-ca13-ead8-786f0c6e1d10/mzaf_17056231988870381864.plus.aac.p.m4a"}
+2026-01-15 12:46:33,889 - INFO - Processing track 90
+2026-01-15 12:46:39,116 - INFO - Pushing to redis queue: {"id": 90, "bpm": 136}
+2026-01-15 12:46:39,118 - INFO - Completed track 90 with BPM: 136
+2026-01-15 12:46:39,119 - INFO - queue: analyze_audio_task_queue, task: {"id":91,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/61/94/d5/6194d5ec-e605-0016-e807-1605c33b4b8a/mzaf_4233838867672908511.plus.aac.p.m4a"}
+2026-01-15 12:46:39,128 - INFO - Processing track 91
+2026-01-15 12:46:40,782 - INFO - Pushing to redis queue: {"id": 91, "bpm": 161}
+2026-01-15 12:46:40,787 - INFO - Completed track 91 with BPM: 161
+2026-01-15 12:46:40,789 - INFO - queue: analyze_audio_task_queue, task: {"id":96,"preview_url":"https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/53/bf/7f/53bf7fac-11dc-40b6-bc53-cda345946aff/mzaf_77120889013659178.plus.aac.p.m4a"}
+2026-01-15 12:46:40,790 - INFO - Processing track 96

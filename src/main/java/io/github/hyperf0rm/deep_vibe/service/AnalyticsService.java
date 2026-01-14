@@ -33,7 +33,7 @@ public class AnalyticsService {
 
     public AverageBpmResponse calculateAverageBpm(String username) {
         User user = userRepository.findByLastfmUsername(username);
-        List<Track> tracks = trackRepository.findByUserScrobblesAndStatus(user.getId(), TrackQueueStatus.COMPLETED);
+        List<Track> tracks = trackRepository.findByUserScrobblesAndStatus(user, TrackQueueStatus.COMPLETED);
         if  (tracks.isEmpty()) {
             return new AverageBpmResponse(username, 0);
         }
