@@ -40,22 +40,7 @@ public class LastFmService {
     }
 
     public List<LastFmResponse.Track> getRecentTracks(String username) {
-        LastFmResponse response = restClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .scheme("http")
-                        .host("ws.audioscrobbler.com")
-                        .path("/2.0/")
-                        .queryParam("method", "user.getrecenttracks")
-                        .queryParam("limit", "200")
-                        .queryParam("user", username)
-                        .queryParam("api_key", apiKey)
-                        .queryParam("format", "json")
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (request, resp) -> {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + username + " not found on Last.fm");
-                })
-                .body(LastFmResponse.class);
+        LastFmResponse response = makeRequestToLastFm(username, 1);
 
         if (response == null) {
             log.error("Last.fm returned null response");
@@ -73,6 +58,47 @@ public class LastFmService {
         }
 
         User user = userRepository.findByLastfmUsername(username);
+
+        int totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
+        addTracksAndScrobblesFromPage(response, user);
+        if (totalPages > 1) {
+            for (int i = 2; i < totalPages + 1; i++) {
+                try {
+                    LastFmResponse nextResponse = makeRequestToLastFm(username, i);
+                    addTracksAndScrobblesFromPage(nextResponse, user);
+                    Thread.sleep(250L);
+                }
+                catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    log.error("Error: {}", e.getMessage());
+                }
+            }
+        }
+
+        return response.recenttracks().track();
+    }
+
+    public LastFmResponse makeRequestToLastFm(String username, Integer page) {
+        return restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("http")
+                        .host("ws.audioscrobbler.com")
+                        .path("/2.0/")
+                        .queryParam("method", "user.getrecenttracks")
+                        .queryParam("limit", "200")
+                        .queryParam("user", username)
+                        .queryParam("api_key", apiKey)
+                        .queryParam("format", "json")
+                        .queryParam("page", page)
+                        .build())
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, (request, resp) -> {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + username + " not found on Last.fm");
+                })
+                .body(LastFmResponse.class);
+    }
+
+    public void addTracksAndScrobblesFromPage(LastFmResponse response, User user) {
         for (LastFmResponse.Track track : response.recenttracks().track()) {
             try {
                 Track trackEntity = trackRepository
@@ -102,7 +128,5 @@ public class LastFmService {
                 log.error("Error", e);
             }
         }
-
-        return response.recenttracks().track();
     }
 }
