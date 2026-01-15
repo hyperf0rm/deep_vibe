@@ -1,7 +1,7 @@
-package io.github.hyperf0rm.deep_vibe.repository;
+package io.github.hyperf0rm.deep_vibe.music.repository;
 
-import io.github.hyperf0rm.deep_vibe.entity.Scrobble;
-import io.github.hyperf0rm.deep_vibe.entity.User;
+import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
+import io.github.hyperf0rm.deep_vibe.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

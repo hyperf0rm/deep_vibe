@@ -1,12 +1,12 @@
-package io.github.hyperf0rm.deep_vibe.service;
+package io.github.hyperf0rm.deep_vibe.music.service;
 
-import io.github.hyperf0rm.deep_vibe.dto.LastFmResponse;
-import io.github.hyperf0rm.deep_vibe.entity.Scrobble;
-import io.github.hyperf0rm.deep_vibe.entity.Track;
-import io.github.hyperf0rm.deep_vibe.entity.User;
-import io.github.hyperf0rm.deep_vibe.repository.ScrobbleRepository;
-import io.github.hyperf0rm.deep_vibe.repository.TrackRepository;
-import io.github.hyperf0rm.deep_vibe.repository.UserRepository;
+import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
+import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
+import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.user.User;
+import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
+import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
+import io.github.hyperf0rm.deep_vibe.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;

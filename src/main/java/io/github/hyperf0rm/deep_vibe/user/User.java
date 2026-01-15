@@ -1,4 +1,4 @@
-package io.github.hyperf0rm.deep_vibe.entity;
+package io.github.hyperf0rm.deep_vibe.user;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;

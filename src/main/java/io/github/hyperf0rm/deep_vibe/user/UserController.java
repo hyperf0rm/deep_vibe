@@ -1,22 +1,19 @@
-package io.github.hyperf0rm.deep_vibe.controller;
+package io.github.hyperf0rm.deep_vibe.user;
 
-import io.github.hyperf0rm.deep_vibe.dto.*;
-import io.github.hyperf0rm.deep_vibe.entity.Scrobble;
-import io.github.hyperf0rm.deep_vibe.entity.Track;
-import io.github.hyperf0rm.deep_vibe.entity.User;
-import io.github.hyperf0rm.deep_vibe.repository.ScrobbleRepository;
-import io.github.hyperf0rm.deep_vibe.repository.TrackRepository;
-import io.github.hyperf0rm.deep_vibe.repository.UserRepository;
-import io.github.hyperf0rm.deep_vibe.service.AnalyticsService;
-import io.github.hyperf0rm.deep_vibe.service.LastFmService;
-import io.github.hyperf0rm.deep_vibe.service.PreviewUrlsService;
+import io.github.hyperf0rm.deep_vibe.music.dto.AverageBpmResponse;
+import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
+import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
+import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
+import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
+import io.github.hyperf0rm.deep_vibe.analytics.AnalyticsService;
+import io.github.hyperf0rm.deep_vibe.music.service.LastFmService;
+import io.github.hyperf0rm.deep_vibe.music.service.PreviewUrlsService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
 
 @Slf4j

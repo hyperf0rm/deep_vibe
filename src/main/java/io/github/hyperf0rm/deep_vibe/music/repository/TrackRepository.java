@@ -1,9 +1,8 @@
-package io.github.hyperf0rm.deep_vibe.repository;
+package io.github.hyperf0rm.deep_vibe.music.repository;
 
-import io.github.hyperf0rm.deep_vibe.entity.Scrobble;
-import io.github.hyperf0rm.deep_vibe.entity.Track;
-import io.github.hyperf0rm.deep_vibe.entity.User;
-import io.github.hyperf0rm.deep_vibe.enums.TrackQueueStatus;
+import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.user.User;
+import io.github.hyperf0rm.deep_vibe.music.entity.TrackQueueStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,8 +1,8 @@
-package io.github.hyperf0rm.deep_vibe.service;
+package io.github.hyperf0rm.deep_vibe.music.service;
 
-import io.github.hyperf0rm.deep_vibe.dto.PreviewUrlsResponse;
-import io.github.hyperf0rm.deep_vibe.entity.Track;
-import io.github.hyperf0rm.deep_vibe.repository.TrackRepository;
+import io.github.hyperf0rm.deep_vibe.music.dto.PreviewUrlsResponse;
+import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;

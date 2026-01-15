@@ -1,4 +1,4 @@
-package io.github.hyperf0rm.deep_vibe.dto;
+package io.github.hyperf0rm.deep_vibe.music.dto;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
-package io.github.hyperf0rm.deep_vibe.entity;
+package io.github.hyperf0rm.deep_vibe.music.entity;
 
-import io.github.hyperf0rm.deep_vibe.enums.TrackQueueStatus;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

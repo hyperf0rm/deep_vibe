@@ -1,9 +1,8 @@
-package io.github.hyperf0rm.deep_vibe.entity;
+package io.github.hyperf0rm.deep_vibe.music.entity;
 
 import jakarta.persistence.*;
 
-import io.github.hyperf0rm.deep_vibe.entity.User;
-import io.github.hyperf0rm.deep_vibe.entity.Track;
+import io.github.hyperf0rm.deep_vibe.user.User;
 
 import java.time.Instant;
 

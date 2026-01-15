@@ -1,12 +1,11 @@
-package io.github.hyperf0rm.deep_vibe.service;
+package io.github.hyperf0rm.deep_vibe.music.service;
 
 
-import io.github.hyperf0rm.deep_vibe.dto.ResultFromWorker;
-import io.github.hyperf0rm.deep_vibe.entity.Track;
-import io.github.hyperf0rm.deep_vibe.enums.TrackQueueStatus;
-import io.github.hyperf0rm.deep_vibe.repository.TrackRepository;
+import io.github.hyperf0rm.deep_vibe.music.dto.ResultFromWorker;
+import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.music.entity.TrackQueueStatus;
+import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
