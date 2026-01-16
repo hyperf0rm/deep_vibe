@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
 import java.util.List;
@@ -39,8 +42,10 @@ public class LastFmService {
         this.scrobbleRepository = scrobbleRepository;
     }
 
-    public List<LastFmResponse.Track> getRecentTracks(String username) {
-        LastFmResponse response = makeRequestToLastFm(username, 1);
+    public List<LastFmResponse.Track> getRecentTracks(String username,
+                                                      Long timestampFrom,
+                                                      Long timestampTo) {
+        LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
 
         if (response == null) {
             log.error("Last.fm returned null response");
@@ -64,7 +69,7 @@ public class LastFmService {
         if (totalPages > 1) {
             for (int i = 2; i < totalPages + 1; i++) {
                 try {
-                    LastFmResponse nextResponse = makeRequestToLastFm(username, i);
+                    LastFmResponse nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
                     addTracksAndScrobblesFromPage(nextResponse, user);
                     Thread.sleep(250L);
                 }
@@ -78,7 +83,10 @@ public class LastFmService {
         return response.recenttracks().track();
     }
 
-    public LastFmResponse makeRequestToLastFm(String username, Integer page) {
+    public LastFmResponse makeRequestToLastFm(String username,
+                                              Integer page,
+                                              Long timestampFrom,
+                                              Long timestampTo) {
         return restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("http")
@@ -88,6 +96,8 @@ public class LastFmService {
                         .queryParam("limit", "200")
                         .queryParam("user", username)
                         .queryParam("api_key", apiKey)
+                        .queryParam("from", timestampFrom)
+                        .queryParam("to", timestampTo)
                         .queryParam("format", "json")
                         .queryParam("page", page)
                         .build())
@@ -108,7 +118,7 @@ public class LastFmService {
                     Track newTrack = new Track();
                     newTrack.setName(track.name());
                     newTrack.setArtistName(track.artist().name());
-                    log.info("New track: {}", newTrack.toString());
+                    log.info("New track: {}", newTrack);
                     trackEntity = trackRepository.save(newTrack);
                 }
 
@@ -123,7 +133,7 @@ public class LastFmService {
                     scrobbleRepository.save(newScrobble);
                 }
             } catch (DataIntegrityViolationException e) {
-                log.warn("track or scrobble alr exists, skipping", e);
+                log.warn("Duplicate Track or Scrobble, skipping");
             } catch (Exception e) {
                 log.error("Error", e);
             }

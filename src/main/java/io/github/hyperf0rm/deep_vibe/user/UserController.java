@@ -61,8 +61,10 @@ public class UserController {
     }
 
     @GetMapping(path = "/sync/{username}")
-    public List<LastFmResponse.Track> doSync(@PathVariable String username) {
-        return lastFmService.getRecentTracks(username);
+    public List<LastFmResponse.Track> doSync(@PathVariable String username,
+                                             @RequestParam(name = "from",  required = false) Long timestampFrom,
+                                             @RequestParam(name = "to", required = false) Long timestampTo) {
+        return lastFmService.getRecentTracks(username, timestampFrom, timestampTo);
     }
 
     @GetMapping(path = "/tracks")
