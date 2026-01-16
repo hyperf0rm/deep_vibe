@@ -12,12 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
 import java.util.List;
@@ -42,24 +40,25 @@ public class LastFmService {
         this.scrobbleRepository = scrobbleRepository;
     }
 
-    public List<LastFmResponse.Track> getRecentTracks(String username,
-                                                      Long timestampFrom,
-                                                      Long timestampTo) {
+    @Async("synchronizationExecutor")
+    public void synchronizeUser(String username,
+                                Long timestampFrom,
+                                Long timestampTo) {
         LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
 
         if (response == null) {
             log.error("Last.fm returned null response");
-            return List.of();
+            return;
         }
 
         if (response.recenttracks() == null) {
             log.error("Last.fm 'recenttracks' field is missing");
-            return List.of();
+            return;
         }
 
         if (response.recenttracks().track() == null) {
             log.error("Track field is empty");
-            return List.of();
+            return;
         }
 
         User user = userRepository.findByLastfmUsername(username);
@@ -79,8 +78,6 @@ public class LastFmService {
                 }
             }
         }
-
-        return response.recenttracks().track();
     }
 
     public LastFmResponse makeRequestToLastFm(String username,

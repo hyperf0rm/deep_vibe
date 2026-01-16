@@ -61,10 +61,11 @@ public class UserController {
     }
 
     @GetMapping(path = "/sync/{username}")
-    public List<LastFmResponse.Track> doSync(@PathVariable String username,
-                                             @RequestParam(name = "from",  required = false) Long timestampFrom,
-                                             @RequestParam(name = "to", required = false) Long timestampTo) {
-        return lastFmService.getRecentTracks(username, timestampFrom, timestampTo);
+    public ResponseEntity<String> synchronizeUser(@PathVariable String username,
+                                                      @RequestParam(name = "from",  required = false) Long timestampFrom,
+                                                      @RequestParam(name = "to", required = false) Long timestampTo) {
+        lastFmService.synchronizeUser(username, timestampFrom, timestampTo);
+        return ResponseEntity.ok("Synchronization started!");
     }
 
     @GetMapping(path = "/tracks")
