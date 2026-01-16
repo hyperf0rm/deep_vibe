@@ -84,7 +84,11 @@ public class UserController {
     }
 
     @GetMapping(path = "/analyze/{username}")
-    public AverageBpmResponse analyzeUserScrobbles(@PathVariable String username) {
-        return analyticsService.calculateAverageBpm(username);
+    public AverageBpmResponse analyzeUserScrobbles(
+            @PathVariable String username,
+            @RequestParam(name = "from",  required = false) Long timestampFrom,
+            @RequestParam(name = "to", required = false) Long timestampTo
+    ) {
+        return analyticsService.calculateAverageBpm(username, timestampFrom, timestampTo);
     }
 }

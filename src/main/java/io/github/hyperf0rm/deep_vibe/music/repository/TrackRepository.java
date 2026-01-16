@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
@@ -19,5 +20,16 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
 
     @Query("SELECT s.track FROM Scrobble s WHERE s.user = :user AND s.track.status = :status ORDER BY s.playedAt DESC")
     public List<Track> findByUserScrobblesAndStatus(@Param("user") User user, @Param("status") TrackQueueStatus status);
+
+    @Query("SELECT s.track " +
+            "FROM Scrobble s " +
+            "WHERE s.user = :user " +
+            "AND s.track.status = :status " +
+            "AND s.playedAt >= :from " +
+            "AND s.playedAt <= :to " +
+            "ORDER BY s.playedAt DESC")
+    public List<Track> findByUserScrobblesAndStatusFilterByPlayedAt(
+            @Param("user") User user, @Param("status") TrackQueueStatus status, Instant from, Instant to
+    );
 
 }
