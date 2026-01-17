@@ -42,6 +42,7 @@ public class ResultFromWorkerConsumer {
             Optional<Track> trackOptional = trackRepository.findById(result.id());
             Track track = trackOptional.orElseThrow();
             track.setBpm(result.bpm());
+            track.setRms(result.rms());
             track.setStatus(TrackQueueStatus.COMPLETED);
             trackRepository.save(track);
         }
