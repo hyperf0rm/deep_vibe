@@ -43,6 +43,7 @@ public class ResultFromWorkerConsumer {
             Track track = trackOptional.orElseThrow();
             track.setBpm(result.bpm());
             track.setRms(result.rms());
+            track.setSpectralCentroid(result.centroid());
             track.setStatus(TrackQueueStatus.COMPLETED);
             trackRepository.save(track);
         }

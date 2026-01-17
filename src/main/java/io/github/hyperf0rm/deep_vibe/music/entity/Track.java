@@ -23,8 +23,9 @@ public class Track {
 
     private short bpm;
     private float rms;
+    private float spectralCentroid;
     // private String key;
-    // private ... spectralCentroid;
+
 
     @OneToMany(mappedBy = "track", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Scrobble> scrobbles = new ArrayList<>();
@@ -93,6 +94,14 @@ public class Track {
         this.rms = rms;
     }
 
+    public float getSpectralCentroid() {
+        return spectralCentroid;
+    }
+
+    public void setSpectralCentroid(float spectralCentroid) {
+        this.spectralCentroid = spectralCentroid;
+    }
+
     public List<Scrobble> getScrobbles() {
         return scrobbles;
     }
@@ -105,4 +114,6 @@ public class Track {
     public String toString() {
         return this.artistName + " - " + this.name;
     }
+
+
 }
