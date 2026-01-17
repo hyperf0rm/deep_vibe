@@ -29,6 +29,9 @@ RESULTS_QUEUE_NAME = "results_queue"
 MIN_DBFS = -80
 MAX_DBFS = 0
 
+MIN_CENTROID = 500
+MAX_CENTROID = 3500
+
 def main():
     try:
         redis_host = os.getenv('REDIS_HOST', 'localhost')
@@ -54,15 +57,20 @@ def main():
                 y, sr = load_audiofile(url)
                 bpm = get_bpm(y, sr)
                 rms = get_rms(y)
+                spectral_centroid = get_spectral_centroid(y, sr)
                 track = {
                     "id": track_id,
                     "bpm": bpm,
-                    "rms": rms
+                    "rms": rms,
+                    "centroid": spectral_centroid
                 }
                 result = json.dumps(track)
                 logging.info(f"Pushing to redis queue: {result}")
                 r.lpush(RESULTS_QUEUE_NAME, result)
-                logging.info(f"Completed track {track_id} with BPM: {bpm} and energy score: {rms}")
+                logging.info(f"Completed track {track_id} "
+                             f"with BPM: {bpm}, "
+                             f"energy score: {rms} "
+                             f"and centroid: {spectral_centroid}")
         except json.JSONDecodeError as e:
             logging.error(f"JSON decode error: {e}")
             logging.error(f"Item was: {repr(item)}")
@@ -100,6 +108,16 @@ def get_rms(y):
     converted_rms = float(clipped_rms)
     energy_score = round(converted_rms, 2)
     return energy_score
+
+
+def get_spectral_centroid(y, sr):
+    centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+    mean_centroid = np.mean(centroid)
+    normalized_centroid = (mean_centroid - MIN_CENTROID) / (MAX_CENTROID - MIN_CENTROID) * 100
+    clipped_centroid = np.clip(normalized_centroid, 1, 100)
+    converted_centroid = float(clipped_centroid)
+    brightness_score = round(converted_centroid, 2)
+    return brightness_score
 
 
 main()
