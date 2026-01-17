@@ -1,7 +1,6 @@
 package io.github.hyperf0rm.deep_vibe.user;
 
-import io.github.hyperf0rm.deep_vibe.music.dto.AverageBpmResponse;
-import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
+import io.github.hyperf0rm.deep_vibe.analytics.GeneralAnalyticsResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
 import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
@@ -13,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -85,11 +82,11 @@ public class UserController {
     }
 
     @GetMapping(path = "/analyze/{username}")
-    public AverageBpmResponse analyzeUserScrobbles(
+    public GeneralAnalyticsResponse analyzeUserScrobbles(
             @PathVariable String username,
             @RequestParam(name = "from",  required = false) Long timestampFrom,
             @RequestParam(name = "to", required = false) Long timestampTo
     ) {
-        return analyticsService.calculateAverageBpm(username, timestampFrom, timestampTo);
+        return analyticsService.GeneralAnalytics(username, timestampFrom, timestampTo);
     }
 }

@@ -1,11 +1,9 @@
 package io.github.hyperf0rm.deep_vibe.analytics;
 
 
-import io.github.hyperf0rm.deep_vibe.music.dto.AverageBpmResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
 import io.github.hyperf0rm.deep_vibe.user.User;
 import io.github.hyperf0rm.deep_vibe.music.entity.TrackQueueStatus;
-import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
 import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import io.github.hyperf0rm.deep_vibe.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +26,7 @@ public class AnalyticsService {
         this.userRepository = userRepository;
     }
 
-    public AverageBpmResponse calculateAverageBpm(String username, Long timestampFrom, Long timestampTo) {
+    public GeneralAnalyticsResponse GeneralAnalytics(String username, Long timestampFrom, Long timestampTo) {
         User user = userRepository.findByLastfmUsername(username);
         List<Track> tracks;
         if (timestampFrom == null || timestampTo == null) {
@@ -43,19 +41,22 @@ public class AnalyticsService {
         }
 
         if  (tracks.isEmpty()) {
-            return new AverageBpmResponse(username, 0);
+            return new GeneralAnalyticsResponse(username, 0, 0F);
         }
         log.info(tracks.toString());
         int sumBpm = 0;
+        float sumRms = 0;
         int count = 0;
         for (Track track : tracks) {
             sumBpm += track.getBpm();
+            sumRms += track.getRms();
             count++;
         }
 
         int averageBpm = sumBpm / count;
+        float averageRms = sumRms / count;
 
-        return new AverageBpmResponse(username, averageBpm);
+        return new GeneralAnalyticsResponse(username, averageBpm, averageRms);
 
     }
 
