@@ -41,22 +41,25 @@ public class AnalyticsService {
         }
 
         if  (tracks.isEmpty()) {
-            return new GeneralAnalyticsResponse(username, 0, 0F);
+            return new GeneralAnalyticsResponse(username, 0, 0F, 0F);
         }
         log.info(tracks.toString());
         int sumBpm = 0;
         float sumRms = 0;
+        float sumCentroid = 0;
         int count = 0;
         for (Track track : tracks) {
             sumBpm += track.getBpm();
             sumRms += track.getRms();
+            sumCentroid += track.getSpectralCentroid();
             count++;
         }
 
         int averageBpm = sumBpm / count;
         float averageRms = sumRms / count;
+        float averageCentroid = sumCentroid / count;
 
-        return new GeneralAnalyticsResponse(username, averageBpm, averageRms);
+        return new GeneralAnalyticsResponse(username, averageBpm, averageRms, averageCentroid);
 
     }
 
