@@ -3,6 +3,7 @@ package io.github.hyperf0rm.deep_vibe.music.service;
 import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.user.LastFmUserResponse;
 import io.github.hyperf0rm.deep_vibe.user.User;
 import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
 import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -135,5 +137,46 @@ public class LastFmService {
                 log.error("Error", e);
             }
         }
+    }
+
+    public Optional<User> fetchUser(String username) {
+        User existingUser =  userRepository.findByLastfmUsername(username);
+        if (existingUser != null) {
+            return Optional.of(existingUser);
+        } else {
+            Optional<LastFmUserResponse> userResponse = findUserOnLastFm(username);
+            if (userResponse.isPresent()) {
+                User newUser = new User();
+                newUser.setLastfmUsername(username);
+                userRepository.save(newUser);
+                return Optional.of(newUser);
+            } else {
+                return Optional.empty();
+            }
+        }
+    }
+
+    public Optional<LastFmUserResponse> findUserOnLastFm(String username) {
+            return restClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .scheme("http")
+                            .host("ws.audioscrobbler.com")
+                            .path("/2.0/")
+                            .queryParam("method", "user.getinfo")
+                            .queryParam("user", username)
+                            .queryParam("api_key", apiKey)
+                            .queryParam("format", "json")
+                            .build())
+                    .exchange((request, response) -> {
+                        if (response.getStatusCode().is4xxClientError()) {
+                            log.info("User not found on Last.fm: {}", username);
+                            return Optional.empty();
+                        } else if (response.getStatusCode().is2xxSuccessful()) {
+                            LastFmUserResponse body = response.bodyTo(LastFmUserResponse.class);
+                            return Optional.ofNullable(body);
+                        } else {
+                            throw new RuntimeException("Last.fm API Error: " + response.getStatusCode());
+                        }
+                    });
     }
 }

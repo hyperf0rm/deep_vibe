@@ -61,8 +61,14 @@ public class UserController {
     public ResponseEntity<String> synchronizeUser(@PathVariable String username,
                                                       @RequestParam(name = "from",  required = false) Long timestampFrom,
                                                       @RequestParam(name = "to", required = false) Long timestampTo) {
-        lastFmService.synchronizeUser(username, timestampFrom, timestampTo);
-        return ResponseEntity.ok("Synchronization started!");
+        if (lastFmService.fetchUser(username).isPresent()) {
+            lastFmService.synchronizeUser(username, timestampFrom, timestampTo);
+            return ResponseEntity.ok("Sync started!");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("User " + username + " not found on Last.fm");
+        }
     }
 
     @GetMapping(path = "/tracks")
