@@ -42,6 +42,8 @@ public class PreviewUrlsService {
                 String[] words = fullName.split(" ");
                 String termParam = String.join("+", words);
 
+                log.info("getting url for track: {}; termParam: {}", fullName, termParam);
+
                 PreviewUrlsResponse response = restClient.get()
                         .uri(uriBuilder -> uriBuilder
                                 .scheme("https")
@@ -54,23 +56,35 @@ public class PreviewUrlsService {
                                 .build())
                         .retrieve()
                         .body(PreviewUrlsResponse.class);
-
-                for (PreviewUrlsResponse.Result result : response.results()) {
-                    if (result.artistName().equalsIgnoreCase(artistName)
-                            && result.trackName().equalsIgnoreCase(trackName)) {
-                        String previewUrl = result.previewUrl();
-                        log.info("Found preview url for track {} - {}: {}",
-                                result.artistName(), result.trackName(), previewUrl
-                        );
-                        track.setPreviewUrl(previewUrl);
-                        trackRepository.save(track);
-                        break;
+                if (response == null || response.results() == null || response.results().isEmpty()) {
+                    log.warn("Not found preview url for track: {}", fullName);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        log.error("Error during thread.sleep", e);
                     }
                 }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    log.error("Error during thread.sleep", e);
+                else {
+                    String previewUrl = response.results().getFirst().previewUrl();
+                    log.info("Found default preview url for track {}", fullName);
+
+                    for (PreviewUrlsResponse.Result result : response.results()) {
+                        if (result.artistName().equalsIgnoreCase(artistName)
+                                && result.trackName().equalsIgnoreCase(trackName)) {
+                            previewUrl = result.previewUrl();
+                            log.info("Found preview url for track {} - {}: {}",
+                                    result.artistName(), result.trackName(), previewUrl
+                            );
+                            break;
+                        }
+                    }
+                    track.setPreviewUrl(previewUrl);
+                    trackRepository.save(track);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        log.error("Error during thread.sleep", e);
+                    }
                 }
             }
         }
