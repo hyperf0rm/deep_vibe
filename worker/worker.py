@@ -32,6 +32,9 @@ MAX_DBFS = 0
 MIN_CENTROID = 500
 MAX_CENTROID = 3500
 
+SR_HIGH = 22050
+SR_LOW = 11025
+
 def main():
     try:
         redis_host = os.getenv('REDIS_HOST', 'localhost')
@@ -54,10 +57,10 @@ def main():
 
                 logging.info(f"Processing track {track_id}")
 
-                y, sr = load_audiofile(url)
-                bpm = get_bpm(y, sr)
-                rms = get_rms(y)
-                spectral_centroid = get_spectral_centroid(y, sr)
+                yt_high, yt_low, S = load_audiofile(url)
+                bpm = get_bpm(yt_low, SR_LOW)
+                rms = get_rms(S)
+                spectral_centroid = get_spectral_centroid(S, SR_HIGH)
                 track = {
                     "id": track_id,
                     "bpm": bpm,
@@ -87,8 +90,18 @@ def load_audiofile(url):
     output_stream = io.BytesIO()
     m4a.export(output_stream, format="wav")
     output_stream.seek(0)
-    y, sr = librosa.load(output_stream)
-    return y, sr
+    y_high, _ = librosa.load(output_stream, sr=SR_HIGH)
+    yt_high, _ = librosa.effects.trim(y_high)
+    S, _ = librosa.magphase(librosa.stft(y=yt_high))
+    yt_low = yt_high[::2]
+    return yt_high, yt_low, S
+
+
+def normalize_and_convert(original_value, min_value, max_value):
+    normalized = (original_value - min_value) / (max_value - min_value) * 100
+    clipped = np.clip(normalized, 1, 100)
+    converted = float(clipped)
+    return round(converted, 2)
 
 
 def get_bpm(y, sr):
@@ -97,27 +110,18 @@ def get_bpm(y, sr):
     return bpm
 
 
-def get_rms(y):
-    rms = ndarray.flatten(librosa.feature.rms(y=y))
-    print(f"RMS: {rms}")
-    print(f"len(RMS): {len(rms)}")
+def get_rms(S):
+    rms = ndarray.flatten(librosa.feature.rms(S=S))
     mean_rms = np.mean(rms)
     mean_rms_dbfs = librosa.amplitude_to_db(mean_rms)
-    normalized_rms = (mean_rms_dbfs - MIN_DBFS) / (MAX_DBFS - MIN_DBFS) * 100
-    clipped_rms = np.clip(normalized_rms, 1, 100)
-    converted_rms = float(clipped_rms)
-    energy_score = round(converted_rms, 2)
-    return energy_score
+    return normalize_and_convert(mean_rms_dbfs, MIN_DBFS, MAX_DBFS)
 
 
-def get_spectral_centroid(y, sr):
-    centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+def get_spectral_centroid(S, sr):
+    centroid = librosa.feature.spectral_centroid(S=S, sr=sr)
     mean_centroid = np.mean(centroid)
-    normalized_centroid = (mean_centroid - MIN_CENTROID) / (MAX_CENTROID - MIN_CENTROID) * 100
-    clipped_centroid = np.clip(normalized_centroid, 1, 100)
-    converted_centroid = float(clipped_centroid)
-    brightness_score = round(converted_centroid, 2)
-    return brightness_score
+    return normalize_and_convert(mean_centroid, MIN_CENTROID, MAX_CENTROID)
 
 
-main()
+if __name__ == "__main__":
+    main()
