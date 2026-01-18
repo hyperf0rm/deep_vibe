@@ -26,7 +26,7 @@ public class AnalyticsService {
         this.userRepository = userRepository;
     }
 
-    public GeneralAnalyticsResponse GeneralAnalytics(String username, Long timestampFrom, Long timestampTo) {
+    public GeneralAnalyticsResponse generalAnalytics(String username, Long timestampFrom, Long timestampTo) {
         User user = userRepository.findByLastfmUsername(username);
         List<Track> tracks;
         if (timestampFrom == null || timestampTo == null) {

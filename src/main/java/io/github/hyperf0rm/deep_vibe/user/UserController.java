@@ -45,6 +45,6 @@ public class UserController {
             @RequestParam(name = "from",  required = false) Long timestampFrom,
             @RequestParam(name = "to", required = false) Long timestampTo
     ) {
-        return analyticsService.GeneralAnalytics(username, timestampFrom, timestampTo);
+        return analyticsService.generalAnalytics(username, timestampFrom, timestampTo);
     }
 }
