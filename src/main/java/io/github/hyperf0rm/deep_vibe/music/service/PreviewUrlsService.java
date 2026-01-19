@@ -2,6 +2,7 @@ package io.github.hyperf0rm.deep_vibe.music.service;
 
 import io.github.hyperf0rm.deep_vibe.music.dto.PreviewUrlsResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.music.entity.TrackQueueStatus;
 import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -58,6 +59,8 @@ public class PreviewUrlsService {
                         .body(PreviewUrlsResponse.class);
                 if (response == null || response.results() == null || response.results().isEmpty()) {
                     log.warn("Not found preview url for track: {}", fullName);
+                    track.setStatus(TrackQueueStatus.FAILED);
+                    trackRepository.save(track);
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
