@@ -77,10 +77,15 @@ public class AnalyticsService {
 
     public List<TimelineResponse> timelineResponse(String username, Long timestampFrom, Long timestampTo) {
         User user = userRepository.findByLastfmUsername(username);
+        List<Scrobble> scrobbles;
 
-        Instant from = Instant.ofEpochSecond(timestampFrom);
-        Instant to = Instant.ofEpochSecond(timestampTo);
-        List<Scrobble> scrobbles = scrobbleRepository.findScrobblesByUserFilterByPlayedAt(user, from, to);
+        if (timestampFrom == null || timestampTo == null) {
+            scrobbles = scrobbleRepository.findByUserOrderByPlayedAtAsc(user);
+        } else {
+            Instant from = Instant.ofEpochSecond(timestampFrom);
+            Instant to = Instant.ofEpochSecond(timestampTo);
+            scrobbles = scrobbleRepository.findByUserFilterByPlayedAt(user, from, to);
+        }
 
         List<LocalDate> dates = new ArrayList<>();
         HashMap<LocalDate, List<Scrobble>> scrobbleDates = new HashMap<>();
@@ -118,10 +123,6 @@ public class AnalyticsService {
             float averageCentroid = sumCentroid / count;
             response.add(new TimelineResponse(username, date, averageBpm, averageRms, averageCentroid));
         }
-        Collections.reverse(response);
         return response;
-
     }
-
 }
-
