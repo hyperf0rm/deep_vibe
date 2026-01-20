@@ -2,6 +2,7 @@ package io.github.hyperf0rm.deep_vibe.user;
 
 import io.github.hyperf0rm.deep_vibe.analytics.GeneralAnalyticsResponse;
 import io.github.hyperf0rm.deep_vibe.analytics.TimelineResponse;
+import io.github.hyperf0rm.deep_vibe.exception.ExternalAPIException;
 import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
 import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import io.github.hyperf0rm.deep_vibe.analytics.AnalyticsService;
@@ -32,13 +33,23 @@ public class UserController {
     public ResponseEntity<String> synchronizeUser(@PathVariable String username,
                                                       @RequestParam(name = "from",  required = false) Long timestampFrom,
                                                       @RequestParam(name = "to", required = false) Long timestampTo) {
-        if (lastFmService.fetchUser(username).isPresent()) {
-            lastFmService.synchronizeUser(username, timestampFrom, timestampTo);
-            return ResponseEntity.ok("Sync started!");
-        } else {
+        try {
+            if (lastFmService.fetchUser(username).isPresent()) {
+                lastFmService.synchronizeUser(username, timestampFrom, timestampTo);
+                return ResponseEntity.ok("Sync started!");
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body("User " + username + " not found on Last.fm");
+            }
+        } catch (ExternalAPIException e) {
+            log.error("API error during sync request for user '{}': {}", username, e.getMessage());
             return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("User " + username + " not found on Last.fm");
+                    .status(e.getStatusCode() == 429 ? HttpStatus.TOO_MANY_REQUESTS : HttpStatus.BAD_GATEWAY)
+                    .body("Last.fm API Error: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("Unexpected error during sync request for user '{}': {}", username, e.getMessage());
+            return ResponseEntity.internalServerError().body("Internal Server Error");
         }
     }
 

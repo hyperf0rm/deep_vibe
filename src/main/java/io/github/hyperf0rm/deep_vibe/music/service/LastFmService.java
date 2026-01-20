@@ -1,5 +1,6 @@
 package io.github.hyperf0rm.deep_vibe.music.service;
 
+import io.github.hyperf0rm.deep_vibe.exception.ExternalAPIException;
 import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
@@ -46,43 +47,52 @@ public class LastFmService {
     public void synchronizeUser(String username,
                                 Long timestampFrom,
                                 Long timestampTo) {
-        LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
-
-        if (response == null) {
-            log.error("Last.fm returned null response");
+        Optional<LastFmResponse> responseOpt;
+        try {
+            responseOpt = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
+        } catch (ExternalAPIException e) {
+            log.error("Error trying to synchronize user: {}. Error: {}", username, e.getMessage());
             return;
         }
 
-        if (response.recenttracks() == null) {
-            log.error("Last.fm 'recenttracks' field is missing");
+        if (responseOpt.isEmpty()) {
+            log.warn("Last.fm return null response for user: {}", username);
             return;
         }
 
-        if (response.recenttracks().track() == null) {
-            log.error("Track field is empty");
-            return;
-        }
-
+        LastFmResponse lastFmResponse = responseOpt.get();
         User user = userRepository.findByLastfmUsername(username);
 
-        int totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
-        addTracksAndScrobblesFromPage(response, user);
+        addTracksAndScrobblesFromPage(lastFmResponse, user);
+
+        int totalPages = Integer.parseInt(lastFmResponse.recenttracks().attr().totalPages());
         if (totalPages > 1) {
             for (int i = 2; i < totalPages + 1; i++) {
                 try {
-                    LastFmResponse nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
-                    addTracksAndScrobblesFromPage(nextResponse, user);
                     Thread.sleep(250L);
-                }
-                catch (InterruptedException e) {
+                    Optional<LastFmResponse> nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
+                    if (nextResponse.isPresent()) {
+                        addTracksAndScrobblesFromPage(nextResponse.get(), user);
+                    } else {
+                        log.warn("Page {} for user '{}' came back empty or null", i, username);
+                    }
+                } catch (ExternalAPIException e) {
+                    log.error("API Error on page {} for user '{}': {}", i, username, e.getMessage());
+                    if (e.getStatusCode() == 429 || e.getStatusCode() == 403 || e.getStatusCode() == 401) {
+                        break;
+                    }
+                } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    log.error("Error: {}", e.getMessage());
+                    log.warn("Sync interrupted for user: {}", username);
+                } catch (Exception e) {
+                    log.error("Unexpected error during sync for user '{}': {}", username, e.getMessage());
                 }
             }
         }
+        log.info("Sync finished for user: {}", username);
     }
 
-    public LastFmResponse makeRequestToLastFm(String username,
+    public Optional<LastFmResponse> makeRequestToLastFm(String username,
                                               Integer page,
                                               Long timestampFrom,
                                               Long timestampTo) {
@@ -100,11 +110,26 @@ public class LastFmService {
                         .queryParam("format", "json")
                         .queryParam("page", page)
                         .build())
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (request, resp) -> {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User " + username + " not found on Last.fm");
-                })
-                .body(LastFmResponse.class);
+                .exchange((request, response) -> {
+                    HttpStatusCode statusCode = response.getStatusCode();
+                    if (statusCode.is2xxSuccessful()) {
+                        LastFmResponse body = response.bodyTo(LastFmResponse.class);
+                        if (body == null || body.recenttracks() == null) {
+                            return Optional.empty();
+                        }
+                        return Optional.of(body);
+                    } else if (statusCode.value() == 404) {
+                        log.info("User '{}' not found on Last.fm", username);
+                        return Optional.empty();
+                    } else if (statusCode.value() == 429) {
+                        log.error("Last.fm rate limit exceeded");
+                        throw new ExternalAPIException("Rate limit exceeded", 429);
+                    } else if (statusCode.is4xxClientError()) {
+                        throw new ExternalAPIException("Last.fm API client error: " + statusCode, statusCode.value());
+                    } else {
+                        throw new ExternalAPIException("Last.fm server error: " + statusCode, statusCode.value());
+                    }
+                });
     }
 
     public void addTracksAndScrobblesFromPage(LastFmResponse response, User user) {
@@ -169,13 +194,14 @@ public class LastFmService {
                             .build())
                     .exchange((request, response) -> {
                         if (response.getStatusCode().is4xxClientError()) {
-                            log.info("User not found on Last.fm: {}", username);
+                            log.info("User '{}' not found on Last.fm", username);
                             return Optional.empty();
                         } else if (response.getStatusCode().is2xxSuccessful()) {
                             LastFmUserResponse body = response.bodyTo(LastFmUserResponse.class);
                             return Optional.ofNullable(body);
                         } else {
-                            throw new RuntimeException("Last.fm API Error: " + response.getStatusCode());
+                            log.error("Last.fm API Error: {}",  response.getStatusCode());
+                            return Optional.empty();
                         }
                     });
     }
