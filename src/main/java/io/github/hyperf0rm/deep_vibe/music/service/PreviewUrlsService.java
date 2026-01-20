@@ -33,7 +33,7 @@ public class PreviewUrlsService {
 
     @Scheduled(fixedDelay = 1000)
     public void findPreviewUrls() {
-        List<Track> tracks = trackRepository.findByPreviewUrlIsNull();
+        List<Track> tracks = trackRepository.findByPreviewUrlIsNullAndStatusNot(TrackQueueStatus.FAILED);
 
         if (tracks != null && !tracks.isEmpty()) {
             for (Track track : tracks) {

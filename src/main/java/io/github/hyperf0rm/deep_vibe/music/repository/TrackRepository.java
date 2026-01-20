@@ -14,7 +14,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
 
     public Track findByNameAndArtistName(String name, String artistName);
 
-    public List<Track> findByPreviewUrlIsNull();
+    public List<Track> findByPreviewUrlIsNullAndStatusNot(TrackQueueStatus status);
 
     public List<Track> findByPreviewUrlIsNotNullAndStatus(TrackQueueStatus status);
 
