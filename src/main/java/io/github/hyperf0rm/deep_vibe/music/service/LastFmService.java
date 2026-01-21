@@ -193,15 +193,24 @@ public class LastFmService {
                             .queryParam("format", "json")
                             .build())
                     .exchange((request, response) -> {
-                        if (response.getStatusCode().is4xxClientError()) {
+                        HttpStatusCode statusCode = response.getStatusCode();
+                        if (statusCode.value() == 404) {
                             log.info("User '{}' not found on Last.fm", username);
                             return Optional.empty();
+                        } else if (statusCode.value() == 429) {
+                            log.error("Last.fm rate limit exceeded");
+                            throw new ExternalAPIException("Rate limit exceeded", 429);
+                        } else if (statusCode.is4xxClientError()) {
+                            throw new ExternalAPIException("Last.fm API client error: " + statusCode, statusCode.value());
                         } else if (response.getStatusCode().is2xxSuccessful()) {
                             LastFmUserResponse body = response.bodyTo(LastFmUserResponse.class);
-                            return Optional.ofNullable(body);
+                            if (body == null) {
+                                return Optional.empty();
+                            }
+                            return Optional.of(body);
                         } else {
                             log.error("Last.fm API Error: {}",  response.getStatusCode());
-                            return Optional.empty();
+                            throw new ExternalAPIException("Last.fm server error: " + statusCode, statusCode.value());
                         }
                     });
     }
