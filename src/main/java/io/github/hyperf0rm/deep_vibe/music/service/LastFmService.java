@@ -12,15 +12,13 @@ import io.github.hyperf0rm.deep_vibe.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -44,6 +42,7 @@ public class LastFmService {
     }
 
     @Async("synchronizationExecutor")
+    @Transactional
     public void synchronizeUser(String username,
                                 Long timestampFrom,
                                 Long timestampTo) {
@@ -62,7 +61,7 @@ public class LastFmService {
 
         LastFmResponse lastFmResponse = responseOpt.get();
         User user = userRepository.findByLastfmUsername(username);
-
+        user.setLastSync(Instant.now());
         addTracksAndScrobblesFromPage(lastFmResponse, user);
 
         int totalPages = Integer.parseInt(lastFmResponse.recenttracks().attr().totalPages());
