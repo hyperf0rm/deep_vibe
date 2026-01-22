@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,7 +78,7 @@ public class AnalyticsService {
         List<Scrobble> scrobbles;
 
         if (timestampFrom == null || timestampTo == null) {
-            scrobbles = scrobbleRepository.findByUserOrderByPlayedAtAsc(user);
+            scrobbles = scrobbleRepository.findByUser(user);
         } else {
             Instant from = Instant.ofEpochSecond(timestampFrom);
             Instant to = Instant.ofEpochSecond(timestampTo);
