@@ -42,7 +42,6 @@ public class LastFmService {
     }
 
     @Async("synchronizationExecutor")
-    @Transactional
     public void synchronizeUser(String username,
                                 Long timestampFrom,
                                 Long timestampTo) {
