@@ -64,6 +64,10 @@ public class AnalyticsService {
             count++;
         }
 
+        if (count == 0) {
+            return new GeneralAnalyticsResponse(username, 0, 0F, 0F);
+        }
+
         int averageBpm = sumBpm / count;
         float averageRms = sumRms / count;
         float averageCentroid = sumCentroid / count;
@@ -116,6 +120,11 @@ public class AnalyticsService {
                 sumCentroid += track.getSpectralCentroid();
                 count++;
             }
+
+            if (count == 0) {
+                continue;
+            }
+
             int averageBpm = sumBpm / count;
             float averageRms = sumRms / count;
             float averageCentroid = sumCentroid / count;
