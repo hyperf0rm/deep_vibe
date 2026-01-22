@@ -15,7 +15,6 @@ public class Track {
     private String name;
     private String artistName;
     private String previewUrl;
-    private boolean isAnalyzed = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -60,14 +59,6 @@ public class Track {
 
     public void setPreviewUrl(String previewUrl) {
         this.previewUrl = previewUrl;
-    }
-
-    public boolean isAnalyzed() {
-        return isAnalyzed;
-    }
-
-    public void setAnalyzed(boolean analyzed) {
-        isAnalyzed = analyzed;
     }
 
     public TrackQueueStatus getStatus() {
