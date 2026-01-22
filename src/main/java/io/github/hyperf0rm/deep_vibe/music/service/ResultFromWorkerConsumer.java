@@ -36,16 +36,20 @@ public class ResultFromWorkerConsumer {
     public void getResultFromQueue() {
 
         if (queueIsNotEmpty()) {
-            String json = redisTemplate.opsForList().rightPop(QUEUE_NAME);
-            ResultFromWorker result = objectMapper.readValue(json, ResultFromWorker.class);
-            log.info("Consumer got result - id: {}, bpm: {}", result.id(), result.bpm());
-            Optional<Track> trackOptional = trackRepository.findById(result.id());
-            Track track = trackOptional.orElseThrow();
-            track.setBpm(result.bpm());
-            track.setRms(result.rms());
-            track.setSpectralCentroid(result.centroid());
-            track.setStatus(TrackQueueStatus.COMPLETED);
-            trackRepository.save(track);
+            try {
+                String json = redisTemplate.opsForList().rightPop(QUEUE_NAME);
+                ResultFromWorker result = objectMapper.readValue(json, ResultFromWorker.class);
+                log.info("Consumer got result - id: {}, bpm: {}", result.id(), result.bpm());
+                Optional<Track> trackOptional = trackRepository.findById(result.id());
+                Track track = trackOptional.orElseThrow();
+                track.setBpm(result.bpm());
+                track.setRms(result.rms());
+                track.setSpectralCentroid(result.centroid());
+                track.setStatus(TrackQueueStatus.COMPLETED);
+                trackRepository.save(track);
+            } catch (Exception e) {
+                log.error("Error in result consumer: {}", e.getMessage());
+            }
         }
     }
 
