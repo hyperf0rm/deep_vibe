@@ -45,6 +45,7 @@ public class ResultFromWorkerConsumer {
                 track.setBpm(result.bpm());
                 track.setRms(result.rms());
                 track.setSpectralCentroid(result.centroid());
+                track.setEmbedding(result.embedding());
                 track.setStatus(TrackQueueStatus.COMPLETED);
                 trackRepository.save(track);
             } catch (Exception e) {

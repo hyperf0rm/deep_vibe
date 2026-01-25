@@ -23,6 +23,7 @@ public class Track {
     private short bpm;
     private float rms;
     private float spectralCentroid;
+    private List<Float> embedding;
     // private String key;
 
 
@@ -91,6 +92,14 @@ public class Track {
 
     public void setSpectralCentroid(float spectralCentroid) {
         this.spectralCentroid = spectralCentroid;
+    }
+
+    public List<Float> getEmbedding() {
+        return embedding;
+    }
+
+    public void setEmbedding(List<Float> embedding) {
+        this.embedding = embedding;
     }
 
     public List<Scrobble> getScrobbles() {
