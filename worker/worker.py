@@ -9,8 +9,10 @@ from pydub import AudioSegment
 import json
 import numpy as np
 from numpy import ndarray
+from transformers import Wav2Vec2FeatureExtractor, AutoModel
+import torch
 
-LOG_FILE = "worker_crash.log"
+LOG_FILE = "worker.log"
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -32,8 +34,11 @@ MAX_DBFS = 0
 MIN_CENTROID = 500
 MAX_CENTROID = 3500
 
-SR_HIGH = 22050
+SR_HIGH = 24000
 SR_LOW = 11025
+
+model = AutoModel.from_pretrained("m-a-p/MERT-v1-330M", trust_remote_code=True)
+processor = Wav2Vec2FeatureExtractor.from_pretrained("m-a-p/MERT-v1-330M", trust_remote_code=True)
 
 def main():
     try:
@@ -61,11 +66,13 @@ def main():
                 bpm = get_bpm(yt_low, SR_LOW)
                 rms = get_rms(S)
                 spectral_centroid = get_spectral_centroid(S, SR_HIGH)
+                embedding = get_embedding(yt_high, SR_HIGH)
                 track = {
                     "id": track_id,
                     "bpm": bpm,
                     "rms": rms,
-                    "centroid": spectral_centroid
+                    "centroid": spectral_centroid,
+                    "embedding": embedding
                 }
                 result = json.dumps(track)
                 logging.info(f"Pushing to redis queue: {result}")
@@ -73,7 +80,8 @@ def main():
                 logging.info(f"Completed track {track_id} "
                              f"with BPM: {bpm}, "
                              f"energy score: {rms} "
-                             f"and centroid: {spectral_centroid}")
+                             f"and centroid: {spectral_centroid} "
+                             f"+ embedding")
         except json.JSONDecodeError as e:
             logging.error(f"JSON decode error: {e}")
             logging.error(f"Item was: {repr(item)}")
@@ -95,6 +103,19 @@ def load_audiofile(url):
     S, _ = librosa.magphase(librosa.stft(y=yt_high))
     yt_low = yt_high[::2]
     return yt_high, yt_low, S
+
+
+def get_embedding(y, sr):
+    if sr != SR_HIGH:
+        y = librosa.resample(y, orig_sr=sr, target_sr=SR_HIGH)
+        sr = SR_HIGH
+    inputs = processor(y, sampling_rate=sr, return_tensors="pt", padding=True)
+    with torch.no_grad():
+        outputs = model(**inputs, output_hidden_states=True)
+    all_layers_hidden_states = torch.stack(outputs.hidden_states).squeeze()
+    deepest_hidden_state = all_layers_hidden_states[-1]
+    embedding = torch.mean(deepest_hidden_state, dim=0).numpy()
+    return embedding.tolist()
 
 
 def normalize_and_convert(original_value, min_value, max_value):
