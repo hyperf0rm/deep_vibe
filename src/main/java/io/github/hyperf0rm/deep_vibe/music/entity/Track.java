@@ -23,7 +23,9 @@ public class Track {
     private short bpm;
     private float rms;
     private float spectralCentroid;
-    private List<Float> embedding;
+
+    @Column(columnDefinition = "vector(1024)")
+    private float[] embedding;
     // private String key;
 
 
@@ -94,11 +96,11 @@ public class Track {
         this.spectralCentroid = spectralCentroid;
     }
 
-    public List<Float> getEmbedding() {
+    public float[] getEmbedding() {
         return embedding;
     }
 
-    public void setEmbedding(List<Float> embedding) {
+    public void setEmbedding(float[] embedding) {
         this.embedding = embedding;
     }
 

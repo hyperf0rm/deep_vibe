@@ -6,5 +6,5 @@ public record ResultFromWorker(
         Short bpm,
         Float rms,
         Float centroid,
-        List<Float> embedding) {
+        float[] embedding) {
 }
