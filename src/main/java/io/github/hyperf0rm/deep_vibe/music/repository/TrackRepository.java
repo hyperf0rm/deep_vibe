@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
 
@@ -31,5 +32,16 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     public List<Track> findByUserScrobblesAndStatusFilterByPlayedAt(
             @Param("user") User user, @Param("status") TrackQueueStatus status, Instant from, Instant to
     );
+
+    @Query(value = "SELECT * " +
+            "FROM tracks " +
+            "WHERE id != :trackId " +
+            "ORDER BY embedding <=> " +
+            "(SELECT embedding FROM tracks WHERE id = :trackId)" +
+            "LIMIT :limit",
+           nativeQuery = true)
+    public List<TrackProjection> findSimilarTracks(Long trackId, int limit);
+
+    Optional<TrackProjection> findTrackProjectionById(Long id);
 
 }

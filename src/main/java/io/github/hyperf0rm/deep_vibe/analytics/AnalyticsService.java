@@ -4,6 +4,7 @@ package io.github.hyperf0rm.deep_vibe.analytics;
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
 import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
+import io.github.hyperf0rm.deep_vibe.music.repository.TrackProjection;
 import io.github.hyperf0rm.deep_vibe.user.User;
 import io.github.hyperf0rm.deep_vibe.music.entity.TrackQueueStatus;
 import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
@@ -129,6 +130,27 @@ public class AnalyticsService {
             float averageRms = sumRms / count;
             float averageCentroid = sumCentroid / count;
             response.add(new TimelineResponse(username, date, averageBpm, averageRms, averageCentroid));
+        }
+        return response;
+    }
+
+    public List<TrackResponse> findSimilarTracks(Long id) {
+        TrackProjection track = trackRepository.findTrackProjectionById(id).orElse(null);
+        if (track == null || !track.getStatus().equals(TrackQueueStatus.COMPLETED)) {
+            return List.of();
+        }
+        List<TrackProjection> tracks = trackRepository.findSimilarTracks(track.getId(), 5);
+        List<TrackResponse> response = new ArrayList<>();
+        for (TrackProjection t: tracks) {
+            response.add(new TrackResponse(
+                    t.getId(),
+                    t.getArtistName(),
+                    t.getName(),
+                    t.getBpm(),
+                    t.getRms(),
+                    t.getSpectralCentroid(),
+                    t.getPreviewUrl()
+            ));
         }
         return response;
     }
