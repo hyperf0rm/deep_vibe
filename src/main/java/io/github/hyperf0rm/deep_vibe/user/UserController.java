@@ -18,6 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@CrossOrigin
 @RequestMapping(path = "/users")
 public class UserController {
     private final LastFmService lastFmService;
