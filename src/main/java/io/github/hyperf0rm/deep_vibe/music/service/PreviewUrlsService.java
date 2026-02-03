@@ -6,7 +6,7 @@ import io.github.hyperf0rm.deep_vibe.music.entity.Track;
 import io.github.hyperf0rm.deep_vibe.music.entity.TrackQueueStatus;
 import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
+import org.apache.commons.text.similarity.JaroWinklerSimilarity;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,8 +39,8 @@ public class PreviewUrlsService {
 
         if (tracks != null && !tracks.isEmpty()) {
             for (Track track : tracks) {
-                String trackName = track.getName();
-                String artistName = track.getArtistName();
+                String trackName = track.getName().toLowerCase();
+                String artistName = track.getArtistName().toLowerCase();
                 String fullName = artistName + " " + trackName;
                 String[] words = fullName.split(" ");
                 String termParam = String.join("+", words);
@@ -73,7 +73,7 @@ public class PreviewUrlsService {
                                 }
                             });
                     if (response == null || response.results() == null || response.results().isEmpty()) {
-                        log.warn("Not found preview url for track: {}", fullName);
+                        log.warn("Preview url not found for track {} - {}", artistName, trackName);
                         track.setStatus(TrackQueueStatus.FAILED);
                         trackRepository.save(track);
                         try {
@@ -83,38 +83,68 @@ public class PreviewUrlsService {
                         }
                     }
                     else {
-                        String previewUrl = response.results().getFirst().previewUrl();
-                        log.info("Found default preview url for track {}", fullName);
+                        PreviewUrlsResponse.Result bestMatch = null;
+                        PreviewUrlsResponse.Result fallbackMatch = null;
+                        JaroWinklerSimilarity jaroWinkler = new JaroWinklerSimilarity();
+                        double bestSimilarityScore = -1.0;
 
                         for (PreviewUrlsResponse.Result result : response.results()) {
-                            if (result.artistName().equalsIgnoreCase(artistName)
-                                    && result.trackName().equalsIgnoreCase(trackName)) {
-                                previewUrl = result.previewUrl();
-                                log.info("Found preview url for track {} - {}: {}",
-                                        result.artistName(), result.trackName(), previewUrl
-                                );
+
+                            String itunesArtist = result.artistName().toLowerCase().trim();
+                            String itunesTrack = result.trackName().toLowerCase().trim();
+
+                            if (!itunesArtist.contains(artistName)
+                                    && !artistName.contains(itunesArtist)) {
+                                continue;
+                            }
+
+                            if (itunesArtist.equals(artistName)
+                                    && itunesTrack.equals(trackName)) {
+                                bestMatch = result;
                                 break;
                             }
+
+                            double currentSimilarityScore = jaroWinkler.apply(itunesTrack, trackName);
+                            if (currentSimilarityScore > bestSimilarityScore) {
+                                if (currentSimilarityScore > 0.8 && (itunesTrack.contains(trackName) || trackName.contains(itunesTrack))) {
+                                    bestSimilarityScore = currentSimilarityScore;
+                                    fallbackMatch = result;
+                                }
+                            }
                         }
-                        track.setPreviewUrl(previewUrl);
-                        trackRepository.save(track);
+
+                        PreviewUrlsResponse.Result finalMatch = (bestMatch != null) ? bestMatch : fallbackMatch;
+                        if (finalMatch != null) {
+                            String previewUrl = finalMatch.previewUrl();
+                            log.info("Found preview url for track {} - {} (Type: {}): {}",
+                                    finalMatch.artistName(),
+                                    finalMatch.trackName(),
+                                    (bestMatch != null ? "STRICT" : "SOFT"),
+                                    previewUrl);
+                            track.setPreviewUrl(previewUrl);
+                            trackRepository.save(track);
+                        } else {
+                            log.warn("Preview url not found for track {} - {}", artistName, trackName);
+                            track.setStatus(TrackQueueStatus.FAILED);
+                            trackRepository.save(track);
+                        }
                     }
 
                     Thread.sleep(3000);
 
-                    } catch (InterruptedException e) {
-                        log.error("Error during thread.sleep", e);
-                    } catch (ExternalAPIException e) {
-                        log.error("iTunes 429 Rate Limit hit! Stopping batch processing.");
-                        try {
-                            Thread.sleep(60000);
-                        } catch (InterruptedException err) {
-                            log.error("Error during thread.sleep", err);
-                        }
-                        break;
-                    } catch (Exception e) {
-                        log.error("Unexpected error for track {}: {}", fullName, e.getMessage());
+                } catch (InterruptedException e) {
+                    log.error("Error during thread.sleep", e);
+                } catch (ExternalAPIException e) {
+                    log.error("iTunes 429 Rate Limit hit! Stopping batch processing.");
+                    try {
+                        Thread.sleep(60000);
+                    } catch (InterruptedException err) {
+                        log.error("Error during thread.sleep", err);
                     }
+                        break;
+                } catch (Exception e) {
+                    log.error("Unexpected error for track {}: {}", fullName, e.getMessage());
+                }
             }
         }
     }
