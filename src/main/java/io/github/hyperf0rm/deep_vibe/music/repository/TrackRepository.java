@@ -44,4 +44,6 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
 
     Optional<TrackProjection> findTrackProjectionById(Long id);
 
+    Optional<TrackProjection> findTrackProjectionByNameAndArtistName(String name, String artistName);
+
 }

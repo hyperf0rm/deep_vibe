@@ -4,6 +4,7 @@ import io.github.hyperf0rm.deep_vibe.exception.ExternalAPIException;
 import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
+import io.github.hyperf0rm.deep_vibe.music.repository.TrackProjection;
 import io.github.hyperf0rm.deep_vibe.user.LastFmUserResponse;
 import io.github.hyperf0rm.deep_vibe.user.User;
 import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
@@ -133,15 +134,18 @@ public class LastFmService {
     public void addTracksAndScrobblesFromPage(LastFmResponse response, User user) {
         for (LastFmResponse.Track track : response.recenttracks().track()) {
             try {
-                Track trackEntity = trackRepository
-                        .findByNameAndArtistName(track.name(), track.artist().name());
+                TrackProjection trackProjection = trackRepository
+                        .findTrackProjectionByNameAndArtistName(track.name(), track.artist().name()).orElse(null);
+                Track trackEntity;
 
-                if (trackEntity == null) {
+                if (trackProjection == null) {
                     Track newTrack = new Track();
                     newTrack.setName(track.name());
                     newTrack.setArtistName(track.artist().name());
                     log.info("New track: {}", newTrack);
                     trackEntity = trackRepository.save(newTrack);
+                } else {
+                    trackEntity = trackRepository.getReferenceById(trackProjection.getId());
                 }
 
                 if (track.date() != null && track.date().uts() != null) {
@@ -151,13 +155,13 @@ public class LastFmService {
                     newScrobble.setUser(user);
                     newScrobble.setTrack(trackEntity);
                     newScrobble.setPlayedAt(timestamp);
-                    log.info(newScrobble.toString());
+                    log.info("New scrobble of track ID: {} for user: {}", trackEntity.getId(), user);
                     scrobbleRepository.save(newScrobble);
                 }
             } catch (DataIntegrityViolationException e) {
                 log.warn("Duplicate Track or Scrobble, skipping");
             } catch (Exception e) {
-                log.error("Error", e);
+                log.error("Failed to process track/scrobble from Last.fm page", e);
             }
         }
     }
