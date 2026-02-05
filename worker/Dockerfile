@@ -1,4 +1,4 @@
-FROM python:3.14
+FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -11,9 +11,8 @@ RUN apt-get update && \
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-
-RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install --no-cache-dir torch torchaudio --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
