@@ -1,6 +1,7 @@
 package io.github.hyperf0rm.deep_vibe.music.service;
 
 import io.github.hyperf0rm.deep_vibe.exception.ExternalAPIException;
+import io.github.hyperf0rm.deep_vibe.exception.UserNotFoundException;
 import io.github.hyperf0rm.deep_vibe.music.dto.LastFmResponse;
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
 import io.github.hyperf0rm.deep_vibe.music.entity.Track;
@@ -114,12 +115,11 @@ public class LastFmService {
                     if (statusCode.is2xxSuccessful()) {
                         LastFmResponse body = response.bodyTo(LastFmResponse.class);
                         if (body == null || body.recenttracks() == null) {
-                            return Optional.empty();
+                            throw new ExternalAPIException("Last.fm returned empty response", 502);
                         }
                         return Optional.of(body);
                     } else if (statusCode.value() == 404) {
-                        log.info("User '{}' not found on Last.fm", username);
-                        return Optional.empty();
+                        throw new UserNotFoundException("User '" + username + "' not found on Last.fm", username);
                     } else if (statusCode.value() == 429) {
                         log.error("Last.fm rate limit exceeded");
                         throw new ExternalAPIException("Rate limit exceeded", 429);
@@ -166,21 +166,14 @@ public class LastFmService {
         }
     }
 
-    public Optional<User> fetchUser(String username) {
+    public void fetchOrSaveUser(String username) {
         User existingUser =  userRepository.findByLastfmUsername(username);
-        if (existingUser != null) {
-            return Optional.of(existingUser);
-        } else {
+        if (existingUser == null) {
             Optional<LastFmUserResponse> userResponse = findUserOnLastFm(username);
-            if (userResponse.isPresent()) {
-                User newUser = new User();
-                newUser.setLastfmUsername(username);
-                userRepository.save(newUser);
-                return Optional.of(newUser);
-            } else {
-                return Optional.empty();
+            User newUser = new User();
+            newUser.setLastfmUsername(userResponse.get().user().name());
+            userRepository.save(newUser);
             }
-        }
     }
 
     public Optional<LastFmUserResponse> findUserOnLastFm(String username) {
@@ -197,21 +190,18 @@ public class LastFmService {
                     .exchange((request, response) -> {
                         HttpStatusCode statusCode = response.getStatusCode();
                         if (statusCode.value() == 404) {
-                            log.info("User '{}' not found on Last.fm", username);
-                            return Optional.empty();
+                            throw new UserNotFoundException("User '" + username + "' not found on Last.fm", username);
                         } else if (statusCode.value() == 429) {
-                            log.error("Last.fm rate limit exceeded");
                             throw new ExternalAPIException("Rate limit exceeded", 429);
                         } else if (statusCode.is4xxClientError()) {
                             throw new ExternalAPIException("Last.fm API client error: " + statusCode, statusCode.value());
                         } else if (response.getStatusCode().is2xxSuccessful()) {
                             LastFmUserResponse body = response.bodyTo(LastFmUserResponse.class);
                             if (body == null) {
-                                return Optional.empty();
+                                throw new ExternalAPIException("Last.fm returned empty response", 502);
                             }
                             return Optional.of(body);
                         } else {
-                            log.error("Last.fm API Error: {}",  response.getStatusCode());
                             throw new ExternalAPIException("Last.fm server error: " + statusCode, statusCode.value());
                         }
                     });

@@ -61,7 +61,6 @@ public class PreviewUrlsService {
                             .exchange((request, resp) -> {
                                 int statusCode = resp.getStatusCode().value();
                                 if (statusCode == 429) {
-                                    log.error("Rate limit for preview url service exceeded");
                                     throw new ExternalAPIException("Rate limit for preview url service exceeded", 429);
                                 } else if (resp.getStatusCode().is5xxServerError()) {
                                     throw new ExternalAPIException("iTunes Server Error: " + statusCode, statusCode);
