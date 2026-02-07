@@ -53,8 +53,9 @@ public class LastFmService {
                                 Runnable onComplete) {
 
         LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
-        User user = userRepository.findByLastfmUsername(username);
+        User user = userRepository.findByLastfmUsernameIgnoreCase(username);
         user.setLastSync(Instant.now());
+        userRepository.save(user);
         addTracksAndScrobblesFromPage(response, user);
 
         int totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
@@ -161,7 +162,7 @@ public class LastFmService {
     }
 
     public void fetchOrSaveUser(String username) {
-        User existingUser = userRepository.findByLastfmUsername(username);
+        User existingUser = userRepository.findByLastfmUsernameIgnoreCase(username);
         if (existingUser == null) {
             LastFmUserResponse userResponse = findUserOnLastFm(username);
             User newUser = new User();

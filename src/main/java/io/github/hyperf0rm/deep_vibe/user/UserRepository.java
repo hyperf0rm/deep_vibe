@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    public User findByLastfmUsername(String username);
+    public User findByLastfmUsernameIgnoreCase(String username);
 }

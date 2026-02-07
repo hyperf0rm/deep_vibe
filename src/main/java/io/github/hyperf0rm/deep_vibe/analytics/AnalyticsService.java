@@ -37,7 +37,7 @@ public class AnalyticsService {
     }
 
     public GeneralAnalyticsResponse generalAnalytics(String username, Long timestampFrom, Long timestampTo) {
-        User user = userRepository.findByLastfmUsername(username);
+        User user = userRepository.findByLastfmUsernameIgnoreCase(username);
         List<Track> tracks;
         if (timestampFrom == null || timestampTo == null) {
             tracks = trackRepository.findByUserScrobblesAndStatus(user, TrackQueueStatus.COMPLETED); // might need to include duplicates
@@ -79,7 +79,7 @@ public class AnalyticsService {
 
 
     public List<TimelineResponse> timelineResponse(String username, Long timestampFrom, Long timestampTo) {
-        User user = userRepository.findByLastfmUsername(username);
+        User user = userRepository.findByLastfmUsernameIgnoreCase(username);
         List<Scrobble> scrobbles;
 
         if (timestampFrom == null || timestampTo == null) {
