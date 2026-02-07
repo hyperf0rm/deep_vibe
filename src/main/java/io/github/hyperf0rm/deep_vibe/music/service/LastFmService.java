@@ -23,6 +23,7 @@ import org.springframework.web.client.RestClient;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
@@ -46,8 +47,10 @@ public class LastFmService {
 
     @Async("synchronizationExecutor")
     public void synchronizeUser(String username,
-                                             Long timestampFrom,
-                                             Long timestampTo) {
+                                Long timestampFrom,
+                                Long timestampTo,
+                                AtomicBoolean stopSignal,
+                                Runnable onComplete) {
 
         LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
         User user = userRepository.findByLastfmUsername(username);
@@ -57,6 +60,11 @@ public class LastFmService {
         int totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
         if (totalPages > 1) {
             for (int i = 2; i < totalPages + 1; i++) {
+                log.info("Checking interrupt flag for {}: {}", username, Thread.currentThread().isInterrupted());
+                if (stopSignal.get()) {
+                    log.warn("Sync interrupted for user: {}", username);
+                    return;
+                }
                 try {
                     Thread.sleep(250L);
                     LastFmResponse nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
@@ -64,13 +72,17 @@ public class LastFmService {
                 } catch (ExternalAPIException e) {
                     log.error("API Error on page {} for user '{}': {}", i, username, e.getMessage());
                     if (e.getStatusCode() == 429 || e.getStatusCode() == 403 || e.getStatusCode() == 401) {
-                        break;
+                        return;
                     }
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     log.warn("Sync interrupted for user: {}", username);
+                    return;
                 } catch (Exception e) {
                     log.error("Unexpected error during sync for user '{}': {}", username, e.getMessage());
+                }
+                finally {
+                    onComplete.run();
                 }
             }
         }
@@ -144,23 +156,21 @@ public class LastFmService {
                 }
             } catch (DataIntegrityViolationException e) {
                 log.warn("Duplicate Track or Scrobble, skipping");
-            } catch (Exception e) {
-                log.error("Failed to process track/scrobble from Last.fm page", e);
             }
         }
     }
 
     public void fetchOrSaveUser(String username) {
-        User existingUser =  userRepository.findByLastfmUsername(username);
+        User existingUser = userRepository.findByLastfmUsername(username);
         if (existingUser == null) {
-            Optional<LastFmUserResponse> userResponse = findUserOnLastFm(username);
+            LastFmUserResponse userResponse = findUserOnLastFm(username);
             User newUser = new User();
-            newUser.setLastfmUsername(userResponse.get().user().name());
+            newUser.setLastfmUsername(userResponse.user().name());
             userRepository.save(newUser);
             }
     }
 
-    public Optional<LastFmUserResponse> findUserOnLastFm(String username) {
+    public LastFmUserResponse findUserOnLastFm(String username) {
             return restClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .scheme("http")
@@ -184,7 +194,7 @@ public class LastFmService {
                             if (body == null) {
                                 throw new ExternalAPIException("Last.fm returned empty response", 502);
                             }
-                            return Optional.of(body);
+                            return body;
                         } else {
                             throw new ExternalAPIException("Last.fm server error: " + statusCode, statusCode.value());
                         }

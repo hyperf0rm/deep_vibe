@@ -14,7 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @RestController
@@ -23,6 +27,8 @@ import java.util.List;
 public class UserController {
     private final LastFmService lastFmService;
     private final AnalyticsService analyticsService;
+
+    private final Map<String, AtomicBoolean> activeSyncs = new ConcurrentHashMap<>();
 
     public UserController(
             LastFmService lastFmService,
@@ -36,8 +42,22 @@ public class UserController {
                                                       @RequestParam(name = "from",  required = false) Long timestampFrom,
                                                       @RequestParam(name = "to", required = false) Long timestampTo) {
         lastFmService.fetchOrSaveUser(username);
-        lastFmService.synchronizeUser(username, timestampFrom, timestampTo);
+        AtomicBoolean stopSignal = new AtomicBoolean(false);
+        activeSyncs.put(username, stopSignal);
+        lastFmService.synchronizeUser(username, timestampFrom, timestampTo, stopSignal,
+                () -> activeSyncs.remove(username));
         return ResponseEntity.ok("Sync started!");
+    }
+
+    @PostMapping(path = "/sync/{username}/stop")
+    public ResponseEntity<String> stopSync(@PathVariable String username) {
+        AtomicBoolean stopSignal = activeSyncs.get(username);
+        if (stopSignal != null) {
+            stopSignal.set(true);
+            return ResponseEntity.ok("Sync stopped!");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No active syncs for this user");
+
     }
 
     @GetMapping(path = "/analyze/{username}")
