@@ -22,6 +22,7 @@ import org.springframework.web.client.RestClient;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -45,37 +46,21 @@ public class LastFmService {
 
     @Async("synchronizationExecutor")
     public void synchronizeUser(String username,
-                                Long timestampFrom,
-                                Long timestampTo) {
-        Optional<LastFmResponse> responseOpt;
-        try {
-            responseOpt = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
-        } catch (ExternalAPIException e) {
-            log.error("Error trying to synchronize user: {}. Error: {}", username, e.getMessage());
-            return;
-        }
+                                             Long timestampFrom,
+                                             Long timestampTo) {
 
-        if (responseOpt.isEmpty()) {
-            log.warn("Last.fm return null response for user: {}", username);
-            return;
-        }
-
-        LastFmResponse lastFmResponse = responseOpt.get();
+        LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
         User user = userRepository.findByLastfmUsername(username);
         user.setLastSync(Instant.now());
-        addTracksAndScrobblesFromPage(lastFmResponse, user);
+        addTracksAndScrobblesFromPage(response, user);
 
-        int totalPages = Integer.parseInt(lastFmResponse.recenttracks().attr().totalPages());
+        int totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
         if (totalPages > 1) {
             for (int i = 2; i < totalPages + 1; i++) {
                 try {
                     Thread.sleep(250L);
-                    Optional<LastFmResponse> nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
-                    if (nextResponse.isPresent()) {
-                        addTracksAndScrobblesFromPage(nextResponse.get(), user);
-                    } else {
-                        log.warn("Page {} for user '{}' came back empty or null", i, username);
-                    }
+                    LastFmResponse nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
+                    addTracksAndScrobblesFromPage(nextResponse, user);
                 } catch (ExternalAPIException e) {
                     log.error("API Error on page {} for user '{}': {}", i, username, e.getMessage());
                     if (e.getStatusCode() == 429 || e.getStatusCode() == 403 || e.getStatusCode() == 401) {
@@ -92,7 +77,7 @@ public class LastFmService {
         log.info("Sync finished for user: {}", username);
     }
 
-    public Optional<LastFmResponse> makeRequestToLastFm(String username,
+    public LastFmResponse makeRequestToLastFm(String username,
                                               Integer page,
                                               Long timestampFrom,
                                               Long timestampTo) {
@@ -117,11 +102,10 @@ public class LastFmService {
                         if (body == null || body.recenttracks() == null) {
                             throw new ExternalAPIException("Last.fm returned empty response", 502);
                         }
-                        return Optional.of(body);
+                        return body;
                     } else if (statusCode.value() == 404) {
                         throw new UserNotFoundException("User '" + username + "' not found on Last.fm", username);
                     } else if (statusCode.value() == 429) {
-                        log.error("Last.fm rate limit exceeded");
                         throw new ExternalAPIException("Rate limit exceeded", 429);
                     } else if (statusCode.is4xxClientError()) {
                         throw new ExternalAPIException("Last.fm API client error: " + statusCode, statusCode.value());
