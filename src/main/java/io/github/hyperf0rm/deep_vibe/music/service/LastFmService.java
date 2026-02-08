@@ -17,12 +17,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 
 import java.time.Instant;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
@@ -52,40 +49,39 @@ public class LastFmService {
                                 AtomicBoolean stopSignal,
                                 Runnable onComplete) {
 
-        LastFmResponse response = makeRequestToLastFm(username, 1, timestampFrom, timestampTo);
         User user = userRepository.findByLastfmUsernameIgnoreCase(username);
         user.setLastSync(Instant.now());
         userRepository.save(user);
-        addTracksAndScrobblesFromPage(response, user);
+        int currentPage = 1;
+        int totalPages = 1;
 
-        int totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
-        if (totalPages > 1) {
-            for (int i = 2; i < totalPages + 1; i++) {
-                log.info("Checking interrupt flag for {}: {}", username, Thread.currentThread().isInterrupted());
+        try {
+            do {
                 if (stopSignal.get()) {
                     log.warn("Sync interrupted for user: {}", username);
                     return;
                 }
-                try {
+                if (currentPage > 1) {
                     Thread.sleep(250L);
-                    LastFmResponse nextResponse = makeRequestToLastFm(username, i, timestampFrom, timestampTo);
-                    addTracksAndScrobblesFromPage(nextResponse, user);
-                } catch (ExternalAPIException e) {
-                    log.error("API Error on page {} for user '{}': {}", i, username, e.getMessage());
-                    if (e.getStatusCode() == 429 || e.getStatusCode() == 403 || e.getStatusCode() == 401) {
-                        return;
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    log.warn("Sync interrupted for user: {}", username);
-                    return;
-                } catch (Exception e) {
-                    log.error("Unexpected error during sync for user '{}': {}", username, e.getMessage());
                 }
-                finally {
-                    onComplete.run();
-                }
+                LastFmResponse response = makeRequestToLastFm(username, currentPage, timestampFrom, timestampTo);
+                addTracksAndScrobblesFromPage(response, user);
+                totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
+                currentPage++;
+            } while (currentPage <= totalPages);
+        } catch (ExternalAPIException e) {
+            log.error("API Error on page {} for user '{}': {}", currentPage, username, e.getMessage());
+            if (e.getStatusCode() == 429 || e.getStatusCode() == 403 || e.getStatusCode() == 401) {
+                return;
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.warn("Sync interrupted for user: {}", username);
+            return;
+        } catch (Exception e) {
+            log.error("Unexpected error during sync for user '{}': {}", username, e.getMessage());
+        } finally {
+            onComplete.run();
         }
         log.info("Sync finished for user: {}", username);
     }
