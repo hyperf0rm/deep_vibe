@@ -1,6 +1,7 @@
 package io.github.hyperf0rm.deep_vibe.music.repository;
 
 import io.github.hyperf0rm.deep_vibe.music.entity.Scrobble;
+import io.github.hyperf0rm.deep_vibe.music.entity.Track;
 import io.github.hyperf0rm.deep_vibe.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,6 @@ public interface ScrobbleRepository extends JpaRepository<Scrobble, Long> {
             @Param("user") User user,
             @Param("from") Instant from,
             @Param("to") Instant to);
+
+    public boolean existsByUserAndTrackAndPlayedAt(User user, Track track, Instant playedAt);
 }

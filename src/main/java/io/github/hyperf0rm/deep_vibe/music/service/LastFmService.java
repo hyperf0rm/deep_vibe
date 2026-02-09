@@ -144,15 +144,20 @@ public class LastFmService {
                 if (track.date() != null && track.date().uts() != null) {
                     long uts = Long.parseLong(track.date().uts());
                     Instant timestamp = Instant.ofEpochSecond(uts);
-                    Scrobble newScrobble = new Scrobble();
-                    newScrobble.setUser(user);
-                    newScrobble.setTrack(trackEntity);
-                    newScrobble.setPlayedAt(timestamp);
-                    log.info("New scrobble of track ID: {} for user: {}", trackEntity.getId(), user);
-                    scrobbleRepository.save(newScrobble);
+                    boolean exists = scrobbleRepository.existsByUserAndTrackAndPlayedAt(user, trackEntity, timestamp);
+                    if (!exists) {
+                        Scrobble newScrobble = new Scrobble();
+                        newScrobble.setUser(user);
+                        newScrobble.setTrack(trackEntity);
+                        newScrobble.setPlayedAt(timestamp);
+                        log.info("New scrobble of track ID: {} for user: {}", trackEntity.getId(), user);
+                        scrobbleRepository.save(newScrobble);
+                    } else {
+                        log.debug("Scrobble already exists for user: {}", user);
+                    }
                 }
-            } catch (DataIntegrityViolationException e) {
-                log.warn("Duplicate Track or Scrobble, skipping");
+            } catch (Exception e) {
+                log.error("Error: {}", e.getMessage());
             }
         }
     }
