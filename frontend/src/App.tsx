@@ -16,14 +16,17 @@ function App() {
 
     const from = toUnix(dateFrom);
     const to = toUnix(dateTo);
-    let url = `http://localhost:8080/users/sync/${username}`;
-    if (from) url += `?from=${from}&`;
-    if (to) url += `to=${to}`
+    const params = new URLSearchParams();
+    if (from) params.append('from', from.toString());
+    if (to) params.append('to', to.toString());
+    const baseUrl = `http://localhost:8080/users/sync/${username}`;
+    const fullUrl = params.toString() ? `${baseUrl}?${params.toString()}` : baseUrl;
+    
 
     setStatusMessage(null);
 
     try {
-      const response = await fetch(url, {method: 'GET'});
+      const response = await fetch(fullUrl, {method: 'GET'});
       const text = await response.text();
       setStatusMessage(`${text}`);
     }
