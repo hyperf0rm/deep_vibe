@@ -3,20 +3,18 @@ package io.github.hyperf0rm.deep_vibe.user;
 import io.github.hyperf0rm.deep_vibe.analytics.GeneralAnalyticsResponse;
 import io.github.hyperf0rm.deep_vibe.analytics.TimelineResponse;
 import io.github.hyperf0rm.deep_vibe.analytics.TrackResponse;
-import io.github.hyperf0rm.deep_vibe.exception.ExternalAPIException;
-import io.github.hyperf0rm.deep_vibe.music.repository.ScrobbleRepository;
-import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import io.github.hyperf0rm.deep_vibe.analytics.AnalyticsService;
 import io.github.hyperf0rm.deep_vibe.music.service.LastFmService;
-import io.github.hyperf0rm.deep_vibe.music.service.PreviewUrlsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -29,6 +27,7 @@ public class UserController {
     private final AnalyticsService analyticsService;
 
     private final Map<String, AtomicBoolean> activeSyncs = new ConcurrentHashMap<>();
+    private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
     public UserController(
             LastFmService lastFmService,
@@ -44,9 +43,43 @@ public class UserController {
         lastFmService.fetchOrSaveUser(username);
         AtomicBoolean stopSignal = new AtomicBoolean(false);
         activeSyncs.put(username, stopSignal);
-        lastFmService.synchronizeUser(username, timestampFrom, timestampTo, stopSignal,
-                () -> activeSyncs.remove(username));
+        lastFmService.synchronizeUser(
+                username,
+                timestampFrom,
+                timestampTo,
+                stopSignal,
+                () -> {
+            activeSyncs.remove(username);
+            SseEmitter e = emitters.get(username);
+            if (e != null)  e.complete();
+                },
+                (progressPercentage) -> {
+                    SseEmitter e = emitters.get(username);
+                    if (e != null) {
+                        try {
+                            e.send(progressPercentage);
+                        } catch (IOException ex) {
+                            emitters.remove(username);
+                        }
+                    }
+                });
         return ResponseEntity.ok("Sync started!");
+    }
+
+    @GetMapping(path = "/sync/{username}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamSyncProgress(@PathVariable String username) {
+        SseEmitter emitter = new SseEmitter(0L);
+        emitters.put(username, emitter);
+        emitter.onCompletion(() -> emitters.remove(username));
+        emitter.onTimeout(() -> {
+            log.info("SSE timeout for user: {}", username);
+            emitters.remove(username);
+        });
+        emitter.onError((ex) -> {
+            log.error("SSE error for user: {}", username);
+            emitters.remove(username);
+        });
+        return emitter;
     }
 
     @PostMapping(path = "/sync/{username}/stop")

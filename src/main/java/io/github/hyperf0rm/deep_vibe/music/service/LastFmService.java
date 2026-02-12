@@ -13,7 +13,6 @@ import io.github.hyperf0rm.deep_vibe.music.repository.TrackRepository;
 import io.github.hyperf0rm.deep_vibe.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ import org.springframework.web.client.RestClient;
 
 import java.time.Instant;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -47,13 +47,15 @@ public class LastFmService {
                                 Long timestampFrom,
                                 Long timestampTo,
                                 AtomicBoolean stopSignal,
-                                Runnable onComplete) {
+                                Runnable onComplete,
+                                Consumer<Integer> onProgress) {
 
         User user = userRepository.findByLastfmUsernameIgnoreCase(username);
         user.setLastSync(Instant.now());
         userRepository.save(user);
         int currentPage = 1;
-        int totalPages = 1;
+        int totalPages;
+        int lastSentPercentage = -1;
 
         try {
             do {
@@ -67,6 +69,14 @@ public class LastFmService {
                 LastFmResponse response = makeRequestToLastFm(username, currentPage, timestampFrom, timestampTo);
                 addTracksAndScrobblesFromPage(response, user);
                 totalPages = Integer.parseInt(response.recenttracks().attr().totalPages());
+
+                if (totalPages > 0) {
+                    int progressPercentage = (currentPage * 100) / totalPages;
+                    if (progressPercentage != lastSentPercentage) {
+                        onProgress.accept(progressPercentage);
+                        lastSentPercentage = progressPercentage;
+                    }
+                }
                 currentPage++;
             } while (currentPage <= totalPages);
         } catch (ExternalAPIException e) {
@@ -79,8 +89,11 @@ public class LastFmService {
             log.warn("Sync interrupted for user: {}", username);
             return;
         } catch (Exception e) {
-            log.error("Unexpected error during sync for user '{}': {}", username, e.getMessage());
+            log.error("Unexpected error during sync for user '{}' on page {}: {}", username, currentPage, e.getMessage());
         } finally {
+            if (lastSentPercentage < 100) {
+                onProgress.accept(100);
+            }
             onComplete.run();
         }
         log.info("Sync finished for user: {}", username);
