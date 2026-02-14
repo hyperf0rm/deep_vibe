@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react'
+import Header from './Header'
+
 
 function App() {
   const [username, setUsername] = useState('');
@@ -7,6 +9,7 @@ function App() {
   const [dateTo, setDateTo] = useState('');
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [activeTab, setActiveTab] = useState('Sync');
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
@@ -81,6 +84,7 @@ const handleStopSync = async() => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
       <h1>The Project</h1>
 
       <div style={{ marginBottom: '10px' }}>
