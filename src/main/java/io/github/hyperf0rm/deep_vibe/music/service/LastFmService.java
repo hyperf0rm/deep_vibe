@@ -99,7 +99,7 @@ public class LastFmService {
         log.info("Sync finished for user: {}", username);
     }
 
-    public LastFmResponse makeRequestToLastFm(String username,
+    private LastFmResponse makeRequestToLastFm(String username,
                                               Integer page,
                                               Long timestampFrom,
                                               Long timestampTo) {
@@ -137,7 +137,7 @@ public class LastFmService {
                 });
     }
 
-    public void addTracksAndScrobblesFromPage(LastFmResponse response, User user) {
+    private void addTracksAndScrobblesFromPage(LastFmResponse response, User user) {
         for (LastFmResponse.Track track : response.recenttracks().track()) {
             try {
                 TrackProjection trackProjection = trackRepository
@@ -185,7 +185,7 @@ public class LastFmService {
             }
     }
 
-    public LastFmUserResponse findUserOnLastFm(String username) {
+    private LastFmUserResponse findUserOnLastFm(String username) {
             return restClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .scheme("http")

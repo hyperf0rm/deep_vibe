@@ -54,7 +54,7 @@ public class ResultFromWorkerConsumer {
         }
     }
 
-    public boolean queueIsNotEmpty() {
+    private boolean queueIsNotEmpty() {
         Long queueSize = redisTemplate.opsForList().size(QUEUE_NAME);
         return queueSize != null && queueSize > 0;
     }
